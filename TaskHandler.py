@@ -16,8 +16,7 @@ def handle_task():
                 if (len(task.values()) > 0):
                     values = list(task.values())
                     print('Task received, Offset: ', values[0][0].offset)
-                    result = ExportImage.export([-122.459473, 37.734669, -122.456367, 37.738146],
-                                                'GS_Workspace:i3SF15-meter')
+                    result = ExportImage.export([-122.459473, 37.734669, -122.456367, 37.738146], 'test_filename', 'WMS:http://10.28.11.95:8600/geoserver/wms?service=WMS&version=1.1.0&request=GetMap&layers=GS_Workspace:i3SF15-meter')
                     if (result is not None):
                         consumer.commit()
                         consumer.unsubscribe()

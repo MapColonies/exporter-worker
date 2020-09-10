@@ -1,3 +1,3 @@
 import TaskHandler
 
-TaskHandler.handle_task();
+TaskHandler.handle_task()
