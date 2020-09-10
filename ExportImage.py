@@ -1,17 +1,25 @@
 from osgeo import gdal
 import configparser
 import random
+from math import  floor
 
 config = configparser.ConfigParser()
 config.read('config.ini')
 outputSRS = config['io']['outputSRS']
 outputFormat = config['io']['outputFormat']
+wmsBaseUrl = config['WMS']['wmsBaseUrl']
+version = config['WMS']['version']
 
-def export():
-    kwargs = {'dstSRS': outputSRS, 'format': outputFormat, 'outputBounds': [34.812883, 31.907806, 34.814606, 31.909520]}
-    gdal.Warp(f'{random.randint(1,5555555)}.gpkg', "WMS:http://localhost:8080/geoserver/cite/wms?service=WMS&version=1.1.0&request=GetMap&layers=cite:wizzman", **kwargs)
-    print('done')
+def export(bbox, layer):
+    try:
+        kwargs = {'dstSRS': outputSRS, 'format': outputFormat, 'outputBounds': bbox, 'callback': progress_callback}
+        result = gdal.Warp(f'{random.randint(1, 5555555)}.gpkg', f'{wmsBaseUrl}&version={version}&request=GetMap&layers={layer}', **kwargs)
+        return result
+    except ValueError as e:
+        print(e)
 
 
-
-
+def progress_callback(complete, message, unknown):
+    precent = floor(complete*100)
+    print('progress: {}, message: "{}", unknown {}'.format(precent, message, unknown))
+    return precent
