@@ -1,6 +1,7 @@
 from src.TaskHandler import TaskHandler
 
-class App():
+
+class App:
     def __init__(self):
         self.__taskHandler = TaskHandler()
 
