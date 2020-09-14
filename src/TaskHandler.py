@@ -31,10 +31,12 @@ class TaskHandler():
             consumer.close()
 
     def execute_task(self, task):
-        task_values = self.__helper.load_json(task)
-        print('Task received, Offset: ', task.offset)
-
-        return ExportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
+        try:
+            task_values = self.__helper.load_json(task)
+            print('Task received, Offset: ', task.offset)
+            return ExportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
+        except Exception as e:
+            print(f'Error while execute task, Info: {e}')
 
 
 
