@@ -3,7 +3,7 @@ import configparser
 from math import floor
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read('../config.ini')
 outputSRS = config['io']['outputSRS']
 outputFormat = config['io']['outputFormat']
 
@@ -19,5 +19,5 @@ def export(bbox, filename, url):
 
 def progress_callback(complete, message, unknown):
     percent = floor(complete*100)
-    print('progress: {}, message: "{}", unknown {}'.format(precent, message, unknown))
+    print('progress: {}, message: "{}", unknown {}'.format(percent, message, unknown))
     return percent

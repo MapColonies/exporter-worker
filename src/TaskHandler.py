@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 from kafka import KafkaConsumer
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
@@ -8,7 +7,7 @@ from src.Helper import Helper
 
 class TaskHandler():
     def __init__(self):
-        self.__helper = Helper
+        self.__helper = Helper()
 
     #def _filename_exist(filename):
     #    file = Path(f'{filename}.gpkg')
@@ -31,12 +30,11 @@ class TaskHandler():
         finally:
             consumer.close()
 
+    def execute_task(self, task):
+        task_values = self.__helper.load_json(task)
+        print('Task received, Offset: ', task.offset)
 
-def execute_task(self, task):
-    task_values = self.__helper.load_json(task)
-    print('Task received, Offset: ', task.offset)
-
-    return ExportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
+        return ExportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
 
 
 
