@@ -1,0 +1,13 @@
+{
+    "kafka" : {
+        "host_ip": "{{ getv "/kafka/host_ip" "10.28.11.49:9092" }}",
+        "topic": "{{ getv "/kafka/topic" "topic-test-5" }}",
+        "group_id": "{{ getv "/kafka/group_id" "task_group_1" }}",
+        "auto_commit": "{{ getv "/kafka/auto_commit" "false" }}",
+        "offset_reset": "{{ getv "/kafka/offest_reset" "latest" }}"
+    },
+    "input_output": {
+        "output_srs": "{{ getv "/input_output/output_srs" "EPSG:4326" }}",
+        "output_format": "{{ getv "/input_output/output_format" "GPKG" }}"
+    }
+}

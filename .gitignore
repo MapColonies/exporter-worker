@@ -1,4 +1,12 @@
 # Created by .ignore support plugin (hsz.mobi)
+
+#confd
+confd
+!confd/**/*.tmpl
+!confd/**/*.toml
+!confd/generate-config.py
+config
+
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
