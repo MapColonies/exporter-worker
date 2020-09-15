@@ -23,4 +23,4 @@ class ExportImage:
         percent = floor(complete*100)
         print('progress: {}, message: "{}", unknown {}'.format(percent, message, unknown))
         return percent
-    
+
