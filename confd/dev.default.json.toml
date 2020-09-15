@@ -1,0 +1,13 @@
+[template]
+src = "dev.default.json.tmpl"
+dest = "../config/default.json"
+keys = [
+	"/kafka/host_ip",
+    "/kafka/topic",
+    "/kafka/group_id",
+    "/kafka/auto_commit",
+    "/kafka/offset_reset",
+    "/input_output/output_srs",
+    "/input_output/output_format",
+]
+

@@ -1,4 +1,7 @@
 from src.TaskHandler import TaskHandler
+import os
+import sys
+sys.path.append(os.path.abspath(sys.path[0] + '/../'))
 
 
 class App:

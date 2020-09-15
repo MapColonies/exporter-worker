@@ -1,0 +1,13 @@
+{
+  "kafka": {
+    "host_ip": "10.28.11.49:9092",
+    "topic": "topic-test-5",
+    "group_id": "tasks_group_1",
+    "auto_commit": false,
+    "offset_reset": "latest"
+  },
+  "input_output": {
+    "output_srs": "EPSG:4326",
+    "output_format": "GPKG"
+  }
+}
