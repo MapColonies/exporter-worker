@@ -11,7 +11,7 @@ class TaskHandler:
         self.__helper = Helper()
         self.__exportImage = ExportImage()
         current_dir_path = path.dirname(__file__)
-        config_path = path.join(current_dir_path, '../config/default.json')
+        config_path = path.join(current_dir_path, '../confd/config/default.json')
         with open(config_path, encoding='utf-8') as config_file:
             self.__config = json.loads(config_file.read())
 
@@ -23,6 +23,7 @@ class TaskHandler:
             consumer.subscribe([self.__config['kafka']['topic']])
             for task in consumer:
                 result = self.execute_task(task)
+                print(result)
                 if result is not None:
                     consumer.commit()
                     print('Task done.')
@@ -39,6 +40,7 @@ class TaskHandler:
             return self.__exportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
         except Exception as e:
             print(f'Error while execute task, Info: {e}')
+
 
 
 
