@@ -23,7 +23,6 @@ class TaskHandler:
             consumer.subscribe([self.__config['kafka']['topic']])
             for task in consumer:
                 result = self.execute_task(task)
-                print(result)
                 if result is not None:
                     consumer.commit()
                     print('Task done.')
@@ -34,7 +33,17 @@ class TaskHandler:
             consumer.close()
 
     def execute_task(self, task):
-        task_values = self.__helper.load_json(task)
-        print('Task received, Offset: ', task.offset)
+        try:
+            task_values = self.__helper.load_json(task)
+            print('Task received, Offset: ', task.offset)
+            return self.__exportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
+        except Exception as e:
+            print(f'Error while execute task, Info: {e}')
 
-        return self.__exportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
+
+
+
+
+
+
+
