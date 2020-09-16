@@ -1,15 +1,19 @@
-from kafka import KafkaConsumer
+from kafka import KafkaConsumer, BrokerConnection
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from src.ExportImage import ExportImage
 from src.Helper import Helper
 from os import path
 import json
+from log.logger import Logger
+import socket
 
 
 class TaskHandler:
     def __init__(self):
         self.__helper = Helper()
         self.__exportImage = ExportImage()
+        self.logger = Logger()
+
         current_dir_path = path.dirname(__file__)
         config_path = path.join(current_dir_path, '../confd/config/default.json')
         with open(config_path, encoding='utf-8') as config_file:
@@ -23,29 +27,22 @@ class TaskHandler:
             consumer.subscribe([self.__config['kafka']['topic']])
             for task in consumer:
                 result = self.execute_task(task)
-                print(result)
                 if result is not None:
                     consumer.commit()
-                    print('Task done.')
-        except ValueError as e:
-            print(f'Error: {e}')
-            return 1
+                    self.logger.info(f'Task no.{task.offset} is done.')
+        except Exception as e:
+            self.logger.error(f'Error occurred: {e}.')
+            raise e
         finally:
             consumer.close()
 
     def execute_task(self, task):
         try:
             task_values = self.__helper.load_json(task)
-            print('Task received, Offset: ', task.offset)
-            return self.__exportImage.export(task_values['bbox'], task_values['filename'], task_values['url'])
+            self.logger.info(f'Task no.{task.offset} received.')
+            return self.__exportImage.export(task.offset, task_values['bbox'], task_values['filename'], task_values['url'])
         except Exception as e:
-            print(f'Error while execute task, Info: {e}')
-
-
-
-
-
-
+            self.logger.error(f'Error occurred while exporting: {e}.')
 
 
 
