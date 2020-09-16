@@ -7,7 +7,7 @@ import json
 class ExportImage:
     def __init__(self):
         current_dir_path = path.dirname(__file__)
-        config_path = path.join(current_dir_path, '../config/default.json')
+        config_path = path.join(current_dir_path, '../confd/config/default.json')
         with open(config_path, encoding='utf-8') as config_file:
             self.__config = json.loads(config_file.read())
 
