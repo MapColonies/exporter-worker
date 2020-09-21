@@ -7,7 +7,13 @@
         "offset_reset": "{{ getv "/kafka/offest/reset" "latest" }}"
     },
     "input_output": {
-        "output_srs": "{{ getv "/input_output/output/srs" "EPSG:4326" }}",
-        "output_format": "{{ getv "/input_output/output/format" "GPKG" }}"
+        "output_srs": "{{ getv "/input/output/output/srs" "EPSG:4326" }}",
+        "output_format": "{{ getv "/input/output/output/format" "GPKG" }}"
+    },
+    "logger": {
+        "level": "{{ getv "/logger/level" "INFO" }}",
+        "date_format": "{{ getv "/logger/date/format" "%Y-%m-%d %H:%M:%S" }}",
+        "filename": "{{ getv "/logger/filename" "ew_logs.log"}}",
+        "format": "{{ getv "/logger/format" "%(asctime)s [%(levelname)s]  %(message)s" }}"
     }
 }

@@ -13,7 +13,7 @@ class Logger:
 
         logging.basicConfig(level=self.__config['logger']['level'],
                             filename=self.__config['logger']['filename'],
-                            datefmt=self.__config['logger']['dateFormat'],
+                            datefmt=self.__config['logger']['date_format'],
                             format=self.__config['logger']['format'])
         self.log = logging.getLogger(__name__)
         self._create_file_handler()
