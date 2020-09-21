@@ -8,3 +8,4 @@ RUN pip3 install -r ./requirements.txt
 RUN apk del py3-pip
 ENV PYTHONPATH='/app'
 CMD ["python3", "src/App.py"]
+
