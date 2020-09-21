@@ -21,7 +21,7 @@ class Logger:
     def _create_file_handler(self):
         if self.log.handlers:
             self.log.handlers = []
-        file_handle = logging.FileHandler(r'F:/Repos/exporter-worker/src/ew_logs.log')
+        file_handle = logging.FileHandler(self.__config['logger']['filename'])
         file_handle.setStream(stdout)
         file_handle.setFormatter(logging.Formatter(self.__config['logger']['format']))
         self.log.addHandler(file_handle)
