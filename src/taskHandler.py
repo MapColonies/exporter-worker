@@ -1,11 +1,9 @@
 from kafka import KafkaConsumer, BrokerConnection
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
-from src.ExportImage import ExportImage
-from src.Helper import Helper
-from os import path
-import json
+from src.exportImage import ExportImage
+from src.helper import Helper
 from log.logger import Logger
-import socket
+from src.config import read_config
 
 
 class TaskHandler:
@@ -13,11 +11,7 @@ class TaskHandler:
         self.__helper = Helper()
         self.__exportImage = ExportImage()
         self.logger = Logger()
-
-        current_dir_path = path.dirname(__file__)
-        config_path = path.join(current_dir_path, '../confd/config/default.json')
-        with open(config_path, encoding='utf-8') as config_file:
-            self.__config = json.loads(config_file.read())
+        self.__config = read_config(self)
 
     def handle_tasks(self):
         consumer = KafkaConsumer(bootstrap_servers=[self.__config['kafka']['host_ip']], enable_auto_commit=self.__config['kafka']['auto_commit'],
