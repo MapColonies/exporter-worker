@@ -1,5 +1,5 @@
 from src.TaskHandler import TaskHandler
-from log.logger import Logger
+from src.log.logger import Logger
 from os import path
 import json
 

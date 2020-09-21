@@ -7,7 +7,7 @@ from sys import stdout
 class Logger:
     def __init__(self):
         current_dir_path = path.dirname(__file__)
-        config_path = path.join(current_dir_path, '../confd/config/default.json')
+        config_path = path.join(current_dir_path, '../../confd/config/default.json')
         with open(config_path, encoding='utf-8') as config_file:
             self.__config = json.loads(config_file.read())
 
@@ -21,11 +21,10 @@ class Logger:
     def _create_file_handler(self):
         if self.log.handlers:
             self.log.handlers = []
-        file_handle = logging.FileHandler(r'F:/Repos/exporter-worker/src/ew_logs.log')
+        file_handle = logging.FileHandler(self.__config['logger']['filename'])
         file_handle.setStream(stdout)
         file_handle.setFormatter(logging.Formatter(self.__config['logger']['format']))
         self.log.addHandler(file_handle)
-
 
     def warning(self, msg):
         self.log.warning(msg)

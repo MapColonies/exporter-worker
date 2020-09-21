@@ -1,11 +1,12 @@
-from kafka import KafkaConsumer, BrokerConnection
+import sys
+
+from kafka import KafkaConsumer
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from src.ExportImage import ExportImage
 from src.Helper import Helper
 from os import path
 import json
-from log.logger import Logger
-import socket
+from src.log.logger import Logger
 
 
 class TaskHandler:

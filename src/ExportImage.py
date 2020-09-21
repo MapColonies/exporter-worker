@@ -1,8 +1,10 @@
+import sys
+
 from osgeo import gdal
 from math import floor
 from os import path
 import json
-from log.logger import Logger
+from src.log.logger import Logger
 
 
 class ExportImage:
