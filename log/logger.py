@@ -5,7 +5,7 @@ from src.config import read_config
 
 class Logger:
     def __init__(self):
-        self.__config = read_config(self)
+        self.__config = read_config()
 
         logging.basicConfig(level=self.__config['logger']['level'],
                             filename=self.__config['logger']['filename'],

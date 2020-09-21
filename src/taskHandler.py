@@ -11,7 +11,7 @@ class TaskHandler:
         self.__helper = Helper()
         self.__exportImage = ExportImage()
         self.logger = Logger()
-        self.__config = read_config(self)
+        self.__config = read_config()
 
     def handle_tasks(self):
         consumer = KafkaConsumer(bootstrap_servers=[self.__config['kafka']['host_ip']], enable_auto_commit=self.__config['kafka']['auto_commit'],

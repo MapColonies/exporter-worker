@@ -7,7 +7,7 @@ from src.config import read_config
 class ExportImage:
     def __init__(self):
         self.logger = Logger()
-        self.__config = read_config(self)
+        self.__config = read_config()
 
     def export(self, offset, bbox, filename, url):
         try:
