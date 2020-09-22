@@ -33,6 +33,7 @@ class TaskHandler:
     def execute_task(self, task):
         try:
             task_values = self.__helper.load_json(task)
+            self.__helper.json_fields_validate(task_values)
             self.logger.info(f'Task no.{task.offset} received.')
             return self.__exportImage.export(task.offset, task_values['bbox'], task_values['filename'], task_values['url'])
         except Exception as e:
