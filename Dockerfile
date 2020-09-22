@@ -6,5 +6,6 @@ RUN apk update -q --no-cache \
 COPY . .
 RUN pip3 install -r ./requirements.txt
 RUN apk del py3-pip
-ENV PYTHONPATH='/app'
-CMD ["python3", "src/App.py"]
+ENV PYTHONPATH=${PYTHONPATH}:'/app'
+WORKDIR /app/src
+CMD ["python3", "app.py"]
