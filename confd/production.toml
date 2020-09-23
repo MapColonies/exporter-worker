@@ -1,6 +1,6 @@
 [template]
 src = "production.tmpl"
-dest = "../config/default.json"
+dest = "./config/default.json"
 keys = [
 	"/kafka/host_ip",
     "/kafka/topic",
@@ -8,6 +8,12 @@ keys = [
     "/kafka/auto_commit",
     "/kafka/offset_reset",
     "/input_output/output_srs",
-    "/input_output/output_format"
+    "/input_output/output_format",
+    "/input_output/folder_path",
+    "/logger/level",
+    "/logger/date_format",
+    "/logger/filename",
+    "/logger/format",
+    "/task_fields"
 ]
 
