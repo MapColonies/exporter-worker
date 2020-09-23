@@ -1,6 +1,6 @@
 import platform
 from urllib import request
-from os import path, mkdir
+from os import path, mkdir, system
 import re
 import subprocess
 import sys
@@ -41,6 +41,8 @@ def downloadIfNotExists (uri, filename):
   else:
     print(f'{filename} does not exist.')
     download(uri, filename)
+    if (os == 'Linux'):
+      system(f'chmod +x {filename}')
 
 def copyFile (src, dest, mutationFunc):
   with open(src,'r') as srcFile:
@@ -66,10 +68,10 @@ def createDevConfdConfigFile (env):
   copyFile(confdConfigPath, devConfigPath, mutate)
 
 
-def runConfd ():
+def runConfd():
   print('Running confd')
   try:
-    subprocess.run([confdPath,'-backend', 'env', '-onetime', '-confdir', confdDevBasePath],shell=True,check=True)
+    subprocess.run([f'{confdPath} -onetime -backend env -confdir {confdDevBasePath}'],shell=True,check=True)
   except:
     print('confd failed to run');
 
