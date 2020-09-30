@@ -15,6 +15,7 @@ class TaskHandler:
 
     def handle_tasks(self):
         consumer = KafkaConsumer(bootstrap_servers=[self.__config['kafka']['host_ip']], enable_auto_commit=self.__config['kafka']['auto_commit'],
+                                 max_poll_interval_ms=self.__config['kafka']['poll_timeout'], max_poll_records=self.__config['kafka']['poll_records'],
                                  auto_offset_reset=self.__config['kafka']['offset_reset'], group_id=self.__config['kafka']['group_id'],
                                  partition_assignment_strategy=[RoundRobinPartitionAssignor])
         try:

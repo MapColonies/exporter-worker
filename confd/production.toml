@@ -7,6 +7,8 @@ keys = [
     "/kafka/group_id",
     "/kafka/auto_commit",
     "/kafka/offset_reset",
+    "/kafka/poll/timeout",
+    "/kafka/poll/records",
     "/input_output/output_srs",
     "/input_output/output_format",
     "/input_output/folder_path",
