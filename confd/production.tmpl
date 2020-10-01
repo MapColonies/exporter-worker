@@ -5,7 +5,7 @@
         "group_id": "{{ getv "/kafka/group/id" "task_group_1" }}",
         "auto_commit": "{{ getv "/kafka/auto/commit" "false" }}",
         "offset_reset": "{{ getv "/kafka/offest/reset" "latest" }}",
-        "poll_timeout": {{ getv "/kafka/poll/timeout" "270000000" }},
+        "poll_timeout_milliseconds": {{ getv "/kafka/poll/timeout/milliseconds" "270000000" }},
         "poll_records": {{ getv "/kafka/poll/records" "1" }}
     },
     "input_output": {
