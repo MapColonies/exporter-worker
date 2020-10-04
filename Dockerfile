@@ -10,4 +10,4 @@ ENV PYTHONPATH=${PYTHONPATH}:'/app'
 RUN python3 /app/confd/generate-config.py
 RUN mkdir /app/src/outputs
 WORKDIR /app/src
-CMD ["python3", "app.py"]
+CMD ["python3", "main..py"]
