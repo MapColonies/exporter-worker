@@ -24,7 +24,7 @@ class TaskHandler:
                 result = self.execute_task(task)
                 if result is not None:
                     consumer.commit()
-                    self.logger.info(f'Task no.{task.offset} is done.')
+
         except Exception as e:
             self.logger.error(f'Error occurred: {e}.')
             raise e
@@ -34,9 +34,13 @@ class TaskHandler:
     def execute_task(self, task):
         try:
             task_values = self.__helper.load_json(task)
+            print(task_values)
             self.__helper.json_fields_validate(task_values)
-            self.logger.info(f'Task no.{task.offset} received.')
-            return self.__exportImage.export(task.offset, task_values['bbox'], task_values['filename'], task_values['url'])
+            self.logger.info(f'Task Id: "{task_values["taskId"]}" received.')
+            result = self.__exportImage.export(task.offset, task_values['bbox'], task_values['filename'], task_values['url'], task_values['taskId'])
+            self.logger.info(f'Task Id: "{task_values["taskId"]}" is done.')
+            return result
+
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
 
