@@ -16,6 +16,8 @@ keys = [
     "/logger/date_format",
     "/logger/filename",
     "/logger/format",
-    "/task_fields"
+    "/task_fields",
+    "/elasticsearch/host_ip",
+    "/elasticsearch/port",
+    "/elasticsearch/index"
 ]
-

@@ -38,11 +38,8 @@ class TaskHandler:
             self.__helper.json_fields_validate(task_values)
             self.logger.info(f'Task Id: "{task_values["taskId"]}" received.')
             result = self.__exportImage.export(task.offset, task_values['bbox'], task_values['filename'], task_values['url'], task_values['taskId'])
-            self.logger.info(f'Task Id: "{task_values["taskId"]}" is done.')
-            return result
-
+            if result:
+                self.logger.info(f'Task Id: "{task_values["taskId"]}" is done.')
+                return result
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
-
-
-

@@ -3,7 +3,7 @@ from math import floor
 from log.logger import Logger
 from src.config import read_config
 from datetime import datetime
-from src.services import es
+from src.services import es as esClient
 
 
 class ExportImage:
@@ -33,10 +33,10 @@ class ExportImage:
             if percent == 100:
                 doc['status'] = 'completed'
 
-            es.update(doc)
+            esClient.update(doc)
             self.logger.info(f'Task Id: "{unknown}" updated database with progress: {percent}')
         except Exception as e:
             self.logger.error(f'Database Error: {e}')
             doc['status'] = 'stopped'
-            es.update(doc)
+            esClient.update(doc)
             raise e

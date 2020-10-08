@@ -1,6 +1,21 @@
-from elasticsearch import Elasticsearch
-es = Elasticsearch([{'host': '10.28.11.49', 'port': 9200, 'url_prefix': 'es', 'use_ssl': False}])
+from elasticsearch import Elasticsearch, ConnectionError, RequestError
+from src.config import read_config
+
+__config = read_config()
+esClient = Elasticsearch([{'host': __config['elasticsearch']['host_ip'], 'port': __config['elasticsearch']['port'],
+                           'use_ssl': False}])
+
 
 def update(doc):
-    res = es.index(index='test-index', doc_type=doc['taskId'], body=doc)
-    print(res['result'])
+    try:
+        res = esClient.index(index='test-index-1', id=doc['taskId'], body=doc)
+        print(res['result'])
+    except ConnectionError as ce:
+        raise Exception(
+           f"Error connecting to database {ce.info}"
+        )
+    except RequestError as re:
+        raise Exception(
+            f"Request error from database ({re.error}): {re.info['error']['reason']}"
+        )
+
