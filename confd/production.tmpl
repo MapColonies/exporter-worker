@@ -23,6 +23,6 @@
     "elasticsearch": {
         "host_ip": "{{ getv "/elasticsearch/host/ip" "10.28.11.49" }}",
         "port": {{ getv "/elasticsearch/port" "9200" }},
-        "url_prefix": "{{ getv "/elasticsearch/url_prefix" "test-index" }}"
+        "index": "{{ getv "/elasticsearch/index" "test-index-2" }}"
     }
 }

@@ -8,7 +8,7 @@ esClient = Elasticsearch([{'host': __config['elasticsearch']['host_ip'], 'port':
 
 def update(doc):
     try:
-        res = esClient.index(index='test-index-1', id=doc['taskId'], body=doc)
+        res = esClient.index(index=__config['elasticsearch']['index'], id=doc['taskId'], body=doc)
         print(res['result'])
     except ConnectionError as ce:
         raise Exception(
