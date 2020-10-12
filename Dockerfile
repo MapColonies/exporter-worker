@@ -9,5 +9,5 @@ RUN apk del py3-pip
 ENV PYTHONPATH=${PYTHONPATH}:'/app'
 RUN python3 /app/confd/generate-config.py
 RUN mkdir /app/src/outputs
-WORKDIR /app/src
-CMD ["python3", "main.py"]
+WORKDIR /app/
+CMD ["sh", "start.sh"]
