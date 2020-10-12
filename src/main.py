@@ -13,6 +13,7 @@ class Main:
         probe.readiness = True
         probe.liveness = True
 
+
     def _start_service(self):
         self.logger.info(f'Service is listening to broker: {self.__config["kafka"]["host_ip"]},'f' topic: {self.__config["kafka"]["topic"]}')
         try:

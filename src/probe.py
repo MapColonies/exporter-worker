@@ -7,21 +7,21 @@ liveness = True
 readiness = True
 
 
-@app.route('/liveness')
+@app.route('/worker/liveness')
 def liveness_check():
     if liveness is True:
-        return 200
+        return "Ok", 200
     else:
-        return 500
+        return "Internal Error", 500
 
-@app.route('/rediness')
+
+@app.route('/worker/readiness')
 def readiness_check():
     if readiness is True:
-        return 200
+        return "Ok", 200
     else:
-        return 500
+        return "Internal Error", 500
 
 
 def start():
     app.run(host=host_ip)
-
