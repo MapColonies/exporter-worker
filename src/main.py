@@ -11,6 +11,7 @@ class Main:
         self.logger = Logger()
         self.__taskHandler = TaskHandler()
         probe.readiness = True
+        probe.liveness = True
 
     def _start_service(self):
         self.logger.info(f'Service is listening to broker: {self.__config["kafka"]["host_ip"]},'f' topic: {self.__config["kafka"]["topic"]}')
@@ -18,7 +19,7 @@ class Main:
             self.__taskHandler.handle_tasks()
         except Exception as e:
             self.logger.error(f'Error occurred during running service: {e}')
-            probe.readiness = False
+            probe.liveness = False
 
 
 service_thread = threading.Thread(target=Main()._start_service)
