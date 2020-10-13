@@ -2,7 +2,7 @@ from osgeo import gdal
 from math import floor
 from log.logger import Logger
 from src.config import read_config
-import datetime
+from datetime import datetime
 import requests
 import json
 
