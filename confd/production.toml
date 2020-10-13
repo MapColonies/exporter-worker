@@ -19,7 +19,6 @@ keys = [
     "/task_fields",
     "/probe/host_ip",
     "/elasticsearch/index",
-    "/elasticsearch/host/ip",
+    "/elasticsearch/host_ip",
     "/elasticsearch/port"
 ]
-
