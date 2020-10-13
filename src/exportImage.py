@@ -44,11 +44,13 @@ class ExportImage:
                     "progress": percent,
                     "datetime": str(datetime.now()),
                     "filename": unknown["filename"],
-                    "link": unknown["link"]
+                    "link": ''
+
                 }
             }
             if percent == 100:
                 doc["body"]["status"] = 'completed'
+                doc["body"]["link"] = unknown["link"]
 
             requests.post(url=url, data=json.dumps(doc), headers=headers)
             self.logger.info(f'Task Id "{unknown["taskId"]}" Updated database with progress: {percent}')
