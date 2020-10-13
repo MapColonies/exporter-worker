@@ -2,8 +2,8 @@ from osgeo import gdal
 from math import floor
 from log.logger import Logger
 from src.config import read_config
+import datetime
 import requests
-from datetime import datetime
 import json
 
 
@@ -39,10 +39,10 @@ class ExportImage:
                 "body": {
                     "taskId": unknown,
                     "status": "in-progress",
-                    "percent": percent
+                    "percent": percent,
+                    "timestamp": datetime.now()
                 }
             }
-            json.dumps(doc)
             r = requests.post(url=url, data=json.dumps(doc), headers=headers)
             res = r.text
             print(res)
@@ -51,8 +51,14 @@ class ExportImage:
                 doc['status'] = 'completed'
             self.logger.info(f'Task Id "{unknown}" Updated database with progress: {percent}')
             return percent
+        except requests.ConnectionError as ce:
+            self.logger.error(f'Database connection error: {ce}')
+            raise e
+
         except Exception as e:
-            print(e)
+            doc['status'] = 'completed'
+            r = requests.post(url=url, data=json.dumps(doc), headers=headers)
+            self.logger.error(f'Error occurred while update taskId: {unknown}: {e}')
             raise e
 
 

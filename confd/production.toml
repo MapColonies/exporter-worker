@@ -20,6 +20,6 @@ keys = [
     "/probe/host_ip",
     "/elasticsearch/index",
     "/elasticsearch/host/ip",
-    "/elasticsearch/port" "8080"
+    "/elasticsearch/port"
 ]
 
