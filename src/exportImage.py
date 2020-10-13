@@ -42,15 +42,19 @@ class ExportImage:
                     "percent": percent
                 }
             }
-            json.dumps(doc)
-            r = requests.post(url=url, data=json.dumps(doc), headers=headers)
-            res = r.text
-            print(res)
-
             if percent == 100:
                 doc['status'] = 'completed'
+
+            json.dumps(doc)
+            requests.post(url=url, data=json.dumps(doc), headers=headers)
             self.logger.info(f'Task Id "{unknown}" Updated database with progress: {percent}')
             return percent
+        except ConnectionError as ce:
+            self.logger.error(f'Database connection failed: {ce}')
+            raise ce
         except Exception as e:
-            print(e)
+            doc['status'] = 'failed'
+            json.dumps(doc)
+            requests.post(url=url, data=json.dumps(doc), headers=headers)
+            self.logger.error(f'Task Id "{unknown}" Failed Update database: {percent}')
             raise e
