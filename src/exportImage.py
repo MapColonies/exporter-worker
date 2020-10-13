@@ -3,6 +3,7 @@ from math import floor
 from log.logger import Logger
 from src.config import read_config
 import requests
+from datetime import datetime
 import json
 
 
@@ -13,12 +14,13 @@ class ExportImage:
 
     def export(self, offset, bbox, filename, url, taskid):
         try:
+            es_obj = { "taskId": taskid, "filename": filename, "link": "/test/link"}
             self.logger.info(f'Task no.{offset} in progress.')
             kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                       'format': self.__config['input_output']['output_format'],
                       'outputBounds': bbox,
                       'callback': self.progress_callback,
-                      'callback_data': taskid}
+                      'callback_data': es_obj}
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
             return result
         except Exception as e:
@@ -37,9 +39,12 @@ class ExportImage:
             headers = {"Content-Type": "application/json"}
             doc = {
                 "body": {
-                    "taskId": unknown,
+                    "taskId": unknown["taskId"],
                     "status": "in-progress",
-                    "percent": percent
+                    "progress": percent,
+                    "datetime": str(datetime.now()),
+                    "filename": unknown["filename"],
+                    "link": unknown["link"]
                 }
             }
             if percent == 100:
@@ -47,7 +52,7 @@ class ExportImage:
 
             json.dumps(doc)
             requests.post(url=url, data=json.dumps(doc), headers=headers)
-            self.logger.info(f'Task Id "{unknown}" Updated database with progress: {percent}')
+            self.logger.info(f'Task Id "{unknown["taskId"]}" Updated database with progress: {percent}')
             return percent
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
@@ -56,5 +61,5 @@ class ExportImage:
             doc['status'] = 'failed'
             json.dumps(doc)
             requests.post(url=url, data=json.dumps(doc), headers=headers)
-            self.logger.error(f'Task Id "{unknown}" Failed Update database: {percent}')
+            self.logger.error(f'Task Id "{unknown["taskId"]}" Failed Update database: {percent}')
             raise e
