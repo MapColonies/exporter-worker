@@ -27,6 +27,11 @@ class ExportImage:
             raise e
 
     def progress_callback(self, complete, message, unknown):
+        host_ip = self.__config["elasticsearch"]["host_ip"]
+        port = self.__config["elasticsearch"]["port"]
+        index = self.__config["elasticsearch"]["index"]
+        url = f'http://{host_ip}:{port}/indexes/{index}/document'
+
         try:
             percent = floor(complete * 100)
             headers = {"Content-Type": "application/json"}
@@ -38,7 +43,7 @@ class ExportImage:
                 }
             }
             json.dumps(doc)
-            r = requests.post(url='http://10.28.11.49:8080/indexes/es/document', data=json.dumps(doc), headers=headers)
+            r = requests.post(url=url, data=json.dumps(doc), headers=headers)
             res = r.text
             print(res)
 

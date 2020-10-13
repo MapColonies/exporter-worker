@@ -17,6 +17,9 @@ keys = [
     "/logger/filename",
     "/logger/format",
     "/task_fields",
-    "/probe/host_ip"
+    "/probe/host_ip",
+    "/elasticsearch/index",
+    "/elasticsearch/host/ip",
+    "/elasticsearch/port" "8080"
 ]
 
