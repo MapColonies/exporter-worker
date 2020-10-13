@@ -48,9 +48,8 @@ class ExportImage:
                 }
             }
             if percent == 100:
-                doc['status'] = 'completed'
+                doc["body"]["status"] = 'completed'
 
-            json.dumps(doc)
             requests.post(url=url, data=json.dumps(doc), headers=headers)
             self.logger.info(f'Task Id "{unknown["taskId"]}" Updated database with progress: {percent}')
             return percent
@@ -58,8 +57,7 @@ class ExportImage:
             self.logger.error(f'Database connection failed: {ce}')
             raise ce
         except Exception as e:
-            doc['status'] = 'failed'
-            json.dumps(doc)
+            doc["body"]["status"] = 'failed'
             requests.post(url=url, data=json.dumps(doc), headers=headers)
-            self.logger.error(f'Task Id "{unknown["taskId"]}" Failed Update database: {percent}')
+            self.logger.error(f'Task Id "{unknown["taskId"]}" Failed Update database: {e}')
             raise e
