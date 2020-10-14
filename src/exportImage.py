@@ -11,6 +11,10 @@ class ExportImage:
     def __init__(self):
         self.logger = Logger()
         self.__config = read_config()
+        self.index = self.__config["es"]["index"]
+        self.hostip = self.__config["es"]["host_ip"]
+        self.port = self.__config["es"]["port"]
+        self.url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document'
 
     def export(self, offset, bbox, filename, url, taskid):
         try:
@@ -25,41 +29,46 @@ class ExportImage:
             return result
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
+            doc = {
+                "body": {
+                    "taskId": taskid,
+                    "status": "failed",
+                    "datetime": str(datetime.now()),
+                    "filename": filename
+                }
+            }
+            self.update_db(doc)
             raise e
 
     def progress_callback(self, complete, message, unknown):
-        index = self.__config["es"]["index"]
-        hostip = self.__config["es"]["host_ip"]
-        port = self.__config["es"]["port"]
-
-        url = f'http://{hostip}:{port}/indexes/{index}/document'
-
-        try:
-            percent = floor(complete * 100)
-            headers = {"Content-Type": "application/json"}
-            doc = {
-                "body": {
-                    "taskId": unknown["taskId"],
-                    "status": "in-progress",
-                    "progress": percent,
-                    "datetime": str(datetime.now()),
-                    "filename": unknown["filename"],
-                    "link": ''
-
-                }
+        percent = floor(complete * 100)
+        doc = {
+            "body": {
+                "taskId": unknown["taskId"],
+                "status": "in-progress",
+                "progress": percent,
+                "datetime": str(datetime.now()),
+                "filename": unknown["filename"],
+                "link": ''
             }
-            if percent == 100:
-                doc["body"]["status"] = 'completed'
-                doc["body"]["link"] = unknown["link"]
+        }
 
-            requests.post(url=url, data=json.dumps(doc), headers=headers)
-            self.logger.info(f'Task Id "{unknown["taskId"]}" Updated database with progress: {percent}')
-            return percent
+        if percent == 100:
+            link = f'{self.__config["input_output"]["folder_path"]}/{unknown["filename"]}.gpkg'
+            doc["body"]["status"] = 'completed'
+            doc["body"]["link"] = link
+
+        self.update_db(doc)
+        return percent
+
+    def update_db(self, doc):
+        try:
+            headers = {"Content-Type": "application/json"}
+
+            self.logger.debug(f'Task Id "{doc["body"]["taskId"]}" Updating database')
+            requests.post(url=self.url, data=json.dumps(doc), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
-            raise ce
         except Exception as e:
-            doc["body"]["status"] = 'failed'
-            requests.post(url=url, data=json.dumps(doc), headers=headers)
-            self.logger.error(f'Task Id "{unknown["taskId"]}" Failed Update database: {e}')
-            raise e
+            self.logger.error(f'Task Id "{doc["body"]["taskId"]}" Failed to update database: {e}')
+

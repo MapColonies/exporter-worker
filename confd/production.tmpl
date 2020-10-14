@@ -14,7 +14,7 @@
         "folder_path": "{{ getv "/input/output/folder/path" "./outputs" }}"
     },
     "logger": {
-        "level": "{{ getv "/logger/level" "INFO" }}",
+        "level": "{{ getv "/logger/level" "DEBUG" }}",
         "date_format": "{{ getv "/logger/date/format" "%Y-%m-%d %H:%M:%S" }}",
         "filename": "{{ getv "/logger/filename" "ew_logs.log"}}",
         "format": "{{ getv "/logger/format" "%(asctime)s [%(levelname)s]  %(message)s" }}"
