@@ -18,7 +18,7 @@ class ExportImage:
 
     def export(self, offset, bbox, filename, url, taskid):
         try:
-            es_obj = { "taskId": taskid, "filename": filename, "link": "/test/link"}
+            es_obj = { "taskId": taskid, "filename": filename}
             self.logger.info(f'Task no.{offset} in progress.')
             kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                       'format': self.__config['input_output']['output_format'],
