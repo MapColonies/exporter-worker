@@ -48,8 +48,7 @@ class ExportImage:
                 "status": "in-progress",
                 "progress": percent,
                 "lastUpdateDate": str(datetime.now()),
-                "fileName": unknown["filename"],
-                "link": ''
+                "fileName": unknown["filename"]
             }
         }
 
