@@ -22,5 +22,10 @@
     "task_fields": {{ getv "/task/fields" "[\"filename\", \"url\", \"bbox\", \"taskId\"]" }},
     "probe": {
         "host_ip": "{{ getv "/probe/host/ip" "0.0.0.0" }}"
+    },
+    "es": {
+        "index": "{{ getv "/es/index" "gpkgs_index" }}",
+        "host_ip": "{{ getv "/es/host/ip" "10.28.11.49" }}",
+        "port": "{{ getv "/es/port" "8080" }}"
     }
 }

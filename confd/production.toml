@@ -17,6 +17,8 @@ keys = [
     "/logger/filename",
     "/logger/format",
     "/task_fields",
-    "/probe/host_ip"
+    "/probe/host_ip",
+    "/es/port",
+    "/es/index",
+    "/es/host_ip"
 ]
-

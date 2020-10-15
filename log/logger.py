@@ -31,3 +31,6 @@ class Logger:
 
     def error(self, error):
         self.log.error(error)
+
+    def debug(self, msg):
+        self.log.debug(msg)
