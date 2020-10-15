@@ -59,7 +59,6 @@ class ExportImage:
             doc["body"]["link"] = link
 
         self.update_db(doc)
-        return percent
 
     def update_db(self, doc):
         try:
