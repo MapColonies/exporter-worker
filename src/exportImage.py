@@ -33,7 +33,7 @@ class ExportImage:
             doc = {
                 "body": {
                     "taskId": taskid,
-                    "status": Status.FAILED,
+                    "status": Status.FAILED.value,
                     "lastUpdateDate": str(datetime.now()),
                     "fileName": filename
                 }
@@ -46,16 +46,16 @@ class ExportImage:
         doc = {
             "body": {
                 "taskId": unknown["taskId"],
-                "status": Status.IN_PROGRESS,
+                "status": Status.IN_PROGRESS.value,
                 "progress": percent,
-                "lastUpdateDate": str(datetime.now()),
+                "lastUpdateTime": str(datetime.now()),
                 "fileName": unknown["filename"]
             }
         }
 
         if percent == 100:
             link = f'{self.__config["input_output"]["folder_path"]}/{unknown["filename"]}.gpkg'
-            doc["body"]["status"] = Status.FAILED
+            doc["body"]["status"] = Status.COMPLETED.value
             doc["body"]["link"] = link
 
         self.update_db(doc)
