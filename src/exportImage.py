@@ -2,6 +2,7 @@ from osgeo import gdal
 from math import floor
 from log.logger import Logger
 from src.config import read_config
+from src.model.enum.status_enum import Status
 import requests
 from datetime import datetime
 import json
@@ -32,7 +33,7 @@ class ExportImage:
             doc = {
                 "body": {
                     "taskId": taskid,
-                    "status": "failed",
+                    "status": Status.FAILED,
                     "lastUpdateDate": str(datetime.now()),
                     "fileName": filename
                 }
@@ -45,7 +46,7 @@ class ExportImage:
         doc = {
             "body": {
                 "taskId": unknown["taskId"],
-                "status": "in-progress",
+                "status": Status.IN_PROGRESS,
                 "progress": percent,
                 "lastUpdateDate": str(datetime.now()),
                 "fileName": unknown["filename"]
@@ -54,7 +55,7 @@ class ExportImage:
 
         if percent == 100:
             link = f'{self.__config["input_output"]["folder_path"]}/{unknown["filename"]}.gpkg'
-            doc["body"]["status"] = 'completed'
+            doc["body"]["status"] = Status.FAILED
             doc["body"]["link"] = link
 
         self.update_db(doc)
