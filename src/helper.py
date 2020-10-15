@@ -7,7 +7,7 @@ class Helper:
         self.__config = read_config()
 
     def load_json(self, task):
-        parsed_json = json.loads(task.value)
+        parsed_json = json.loads(task)
         return parsed_json
 
     def json_fields_validate(self, json_obj):
