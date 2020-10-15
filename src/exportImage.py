@@ -33,8 +33,8 @@ class ExportImage:
                 "body": {
                     "taskId": taskid,
                     "status": "failed",
-                    "datetime": str(datetime.now()),
-                    "filename": filename
+                    "lastUpdateDate": str(datetime.now()),
+                    "fileName": filename
                 }
             }
             self.update_db(doc)
@@ -47,8 +47,8 @@ class ExportImage:
                 "taskId": unknown["taskId"],
                 "status": "in-progress",
                 "progress": percent,
-                "datetime": str(datetime.now()),
-                "filename": unknown["filename"],
+                "lastUpdateDate": str(datetime.now()),
+                "fileName": unknown["filename"],
                 "link": ''
             }
         }
