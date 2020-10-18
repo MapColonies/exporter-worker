@@ -4,7 +4,7 @@ import json
 
 valid_mock_task = {
     "taskId": "test_taskId",
-    "filename": "test_file_1",
+    "fileName": "test_file_1",
     "directoryName": "test_directory",
     "bbox": [-122.456598, 37.735764, -122.455048, 37.737011],
     "url": "http://10.28.11.95:8600/geoserver/wms?service=WMS&version=1.1.0&request=GetMap&layers=GS_Workspace:i3SF15-meter",
