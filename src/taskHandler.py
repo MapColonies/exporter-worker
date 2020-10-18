@@ -33,10 +33,10 @@ class TaskHandler:
 
     def execute_task(self, task):
         try:
-            task_values = self.__helper.load_json(task)
+            task_values = self.__helper.load_json(task.value)
             self.__helper.json_fields_validate(task_values)
             self.logger.info(f'Task no.{task.offset} received.')
-            return self.__exportImage.export(task.offset, task_values['bbox'], task_values['filename'], task_values['url'], task_values["taskId"])
+            return self.__exportImage.export(task.offset, task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"])
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
 

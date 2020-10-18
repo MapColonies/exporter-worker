@@ -19,7 +19,7 @@
         "filename": "{{ getv "/logger/filename" "ew_logs.log"}}",
         "format": "{{ getv "/logger/format" "%(asctime)s [%(levelname)s]  %(message)s" }}"
     },
-    "task_fields": {{ getv "/task/fields" "[\"filename\", \"url\", \"bbox\", \"taskId\"]" }},
+    "task_fields": {{ getv "/task/fields" "[\"fileName\", \"url\", \"bbox\", \"taskId\"]" }},
     "probe": {
         "host_ip": "{{ getv "/probe/host/ip" "0.0.0.0" }}"
     },
