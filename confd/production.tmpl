@@ -19,13 +19,13 @@
         "filename": "{{ getv "/logger/filename" "ew_logs.log"}}",
         "format": "{{ getv "/logger/format" "%(asctime)s [%(levelname)s]  %(message)s" }}"
     },
-    "task_fields": {{ getv "/task/fields" "[\"fileName\", \"url\", \"bbox\", \"taskId\"]" }},
+    "task_fields": {{ getv "/task/fields" "[\"filename\", \"url\", \"bbox\", \"taskId\"]" }},
     "probe": {
         "host_ip": "{{ getv "/probe/host/ip" "0.0.0.0" }}"
     },
     "es": {
         "index": "{{ getv "/es/index" "gpkgs_index" }}",
-        "host_ip": "{{ getv "/es/host/ip" "10.28.11.49" }}",
-        "port": "{{ getv "/es/port" "8080" }}"
+        "host_ip": "{{ getv "/es/host/ip" "192.168.1.25" }}",
+        "port": "{{ getv "/es/port" "8081" }}"
     }
 }
