@@ -15,36 +15,37 @@ class ExportImage:
         self.index = self.__config["es"]["index"]
         self.hostip = self.__config["es"]["host_ip"]
         self.port = self.__config["es"]["port"]
-        self.url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document'
 
     def export(self, offset, bbox, filename, url, taskid):
         try:
             es_obj = { "taskId": taskid, "filename": filename}
-            self.logger.info(f'Task no.{offset} in progress.')
+            self.logger.info(f'Task Id "{taskid}" in progress.')
             kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                       'format': self.__config['input_output']['output_format'],
                       'outputBounds': bbox,
                       'callback': self.progress_callback,
                       'callback_data': es_obj}
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
+            if result is not None:
+                self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
             doc = {
-                "body": {
+                "params": {
                     "taskId": taskid,
                     "status": Status.FAILED.value,
                     "lastUpdateDate": str(datetime.now()),
                     "fileName": filename
                 }
             }
-            self.update_db(doc)
+            self.update_db(doc, taskid)
             raise e
 
     def progress_callback(self, complete, message, unknown):
         percent = floor(complete * 100)
         doc = {
-            "body": {
+            "params": {
                 "taskId": unknown["taskId"],
                 "status": Status.IN_PROGRESS.value,
                 "progress": percent,
@@ -55,19 +56,20 @@ class ExportImage:
 
         if percent == 100:
             link = f'{self.__config["input_output"]["folder_path"]}/{unknown["filename"]}.gpkg'
-            doc["body"]["status"] = Status.COMPLETED.value
-            doc["body"]["link"] = link
+            doc["params"]["status"] = Status.COMPLETED.value
+            doc["params"]["link"] = link
 
-        self.update_db(doc)
+        self.update_db(doc, unknown["taskId"])
 
-    def update_db(self, doc):
+    def update_db(self, doc, taskId):
+        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
         try:
             headers = {"Content-Type": "application/json"}
 
-            self.logger.debug(f'Task Id "{doc["body"]["taskId"]}" Updating database')
-            requests.post(url=self.url, data=json.dumps(doc), headers=headers)
+            self.logger.info(f'Task Id "{taskId}" Updating database')
+            requests.post(url=url, data=json.dumps(doc), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
-            self.logger.error(f'Task Id "{doc["body"]["taskId"]}" Failed to update database: {e}')
+            self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
 
