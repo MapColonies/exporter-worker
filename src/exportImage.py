@@ -16,11 +16,10 @@ class ExportImage:
         self.hostip = self.__config["es"]["host_ip"]
         self.port = self.__config["es"]["port"]
 
-
     def export(self, offset, bbox, filename, url, taskid):
         try:
             es_obj = { "taskId": taskid, "filename": filename}
-            self.logger.info(f'Task no.{offset} in progress.')
+            self.logger.info(f'Task Id "{taskid}" in progress.')
             kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                       'format': self.__config['input_output']['output_format'],
                       'outputBounds': bbox,
@@ -34,20 +33,20 @@ class ExportImage:
             self.logger.error(f'Error occurred while exporting: {e}.')
             doc = {
                 "params": {
-                    "customID": taskid,
+                    "taskId": taskid,
                     "status": Status.FAILED.value,
                     "lastUpdateDate": str(datetime.now()),
                     "fileName": filename
                 }
             }
-            self.update_db(doc)
+            self.update_db(doc, taskid)
             raise e
 
     def progress_callback(self, complete, message, unknown):
         percent = floor(complete * 100)
         doc = {
             "params": {
-                "customID": unknown["taskId"],
+                "taskId": unknown["taskId"],
                 "status": Status.IN_PROGRESS.value,
                 "progress": percent,
                 "lastUpdateTime": str(datetime.now()),
@@ -60,17 +59,17 @@ class ExportImage:
             doc["params"]["status"] = Status.COMPLETED.value
             doc["params"]["link"] = link
 
-        self.update_db(doc)
+        self.update_db(doc, unknown["taskId"])
 
-    def update_db(self, doc):
-        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?customID=uFaxJnUBIZfFfU-Oee8L'
+    def update_db(self, doc, taskId):
+        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
         try:
             headers = {"Content-Type": "application/json"}
 
-            self.logger.debug(f'Task Id "{doc["params"]["customID"]}" Updating database')
-            requests.put(url=url, data=json.dumps(doc), headers=headers)
+            self.logger.info(f'Task Id "{taskId}" Updating database')
+            requests.post(url=url, data=json.dumps(doc), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
-            self.logger.error(f'Task Id "{doc["params"]["customID"]}" Failed to update database: {e}')
+            self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
 
