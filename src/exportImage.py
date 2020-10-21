@@ -52,6 +52,3 @@ class ExportImage:
         }
 
         self.__helper.update_db(doc)
-
-
-
