@@ -4,8 +4,6 @@ from src.exportImage import ExportImage
 from src.helper import Helper
 from log.logger import Logger
 from src.config import read_config
-from src.model.enum.status_enum import Status
-from datetime import datetime
 
 
 class TaskHandler:
@@ -25,18 +23,6 @@ class TaskHandler:
             for task in consumer:
                 result = self.execute_task(task)
                 if result is not None:
-                    task_values = self.__helper.load_json(task.value)
-                    link = f'{self.__config["input_output"]["folder_path"]}/{task_values["fileName"]}.gpkg'
-                    doc = {
-                        "params": {
-                            "status": Status.COMPLETED.value,
-                            "progress": 100,
-                            "lastUpdateTime": str(datetime.now()),
-                            "link": link
-                        }
-                    }
-                    self.__helper.update_db(doc)
-
                     consumer.commit()
         except Exception as e:
             self.logger.error(f'Error occurred: {e}.')
@@ -49,7 +35,7 @@ class TaskHandler:
             task_values = self.__helper.load_json(task.value)
             self.__helper.json_fields_validate(task_values)
             self.logger.info(f'Task Id "{task_values["taskId"]}" received.')
-            return self.__exportImage.export(task.offset, task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"])
+            return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"])
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
 

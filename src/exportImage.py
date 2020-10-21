@@ -13,9 +13,9 @@ class ExportImage:
         self.__helper = Helper()
         self.__config = read_config()
 
-    def export(self, offset, bbox, filename, url, taskid):
+    def export(self, bbox, filename, url, taskid):
         try:
-            es_obj = { "taskId": taskid, "filename": filename}
+            es_obj = {"taskId": taskid, "filename": filename}
             self.logger.info(f'Task Id "{taskid}" in progress.')
             kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                       'format': self.__config['input_output']['output_format'],
@@ -25,6 +25,16 @@ class ExportImage:
 
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
             if result is not None:
+                link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
+                doc = {
+                    "params": {
+                        "status": Status.COMPLETED.value,
+                        "progress": 100,
+                        "lastUpdateTime": str(datetime.now()),
+                        "link": link
+                    }
+                }
+                self.__helper.update_db(doc)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
