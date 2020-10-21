@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class Status(Enum):
-    IN_PROGRESS = "in-progress"
-    COMPLETED = "completed"
-    FAILED = "failed"
+    IN_PROGRESS = "In-Progress"
+    COMPLETED = "Completed"
+    FAILED = "Failed"
