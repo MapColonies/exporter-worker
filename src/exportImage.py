@@ -3,18 +3,17 @@ from math import floor
 from log.logger import Logger
 from src.config import read_config
 from src.model.enum.status_enum import Status
-import requests
 from datetime import datetime
-import json
+from src.helper import Helper
 
 
 class ExportImage:
+    async_list = []
+
     def __init__(self):
         self.logger = Logger()
+        self.__helper = Helper()
         self.__config = read_config()
-        self.index = self.__config["es"]["index"]
-        self.hostip = self.__config["es"]["host_ip"]
-        self.port = self.__config["es"]["port"]
 
     def export(self, offset, bbox, filename, url, taskid):
         try:
@@ -39,7 +38,7 @@ class ExportImage:
                     "fileName": filename
                 }
             }
-            self.update_db(doc, taskid)
+            self.__helper.update_db(doc)
             raise e
 
     def progress_callback(self, complete, message, unknown):
@@ -54,22 +53,7 @@ class ExportImage:
             }
         }
 
-        if percent == 100:
-            link = f'{self.__config["input_output"]["folder_path"]}/{unknown["filename"]}.gpkg'
-            doc["params"]["status"] = Status.COMPLETED.value
-            doc["params"]["link"] = link
+        self.__helper.update_db(doc)
 
-        self.update_db(doc, unknown["taskId"])
 
-    def update_db(self, doc, taskId):
-        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
-        try:
-            headers = {"Content-Type": "application/json"}
-
-            self.logger.info(f'Task Id "{taskId}" Updating database')
-            requests.post(url=url, data=json.dumps(doc), headers=headers)
-        except ConnectionError as ce:
-            self.logger.error(f'Database connection failed: {ce}')
-        except Exception as e:
-            self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
 

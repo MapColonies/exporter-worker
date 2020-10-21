@@ -22,7 +22,6 @@ class Logger:
         file_handle.setFormatter(logging.Formatter(self.__config['logger']['format']))
         self.log.addHandler(file_handle)
 
-
     def warning(self, msg):
         self.log.warning(msg)
 
