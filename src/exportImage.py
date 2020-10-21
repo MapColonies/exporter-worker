@@ -22,6 +22,7 @@ class ExportImage:
                       'outputBounds': bbox,
                       'callback': self.progress_callback,
                       'callback_data': es_obj}
+
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
             if result is not None:
                 self.logger.info(f'Task Id "{taskid}" is done.')
@@ -52,3 +53,4 @@ class ExportImage:
         }
 
         self.__helper.update_db(doc)
+
