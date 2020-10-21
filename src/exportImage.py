@@ -8,8 +8,6 @@ from src.helper import Helper
 
 
 class ExportImage:
-    async_list = []
-
     def __init__(self):
         self.logger = Logger()
         self.__helper = Helper()
