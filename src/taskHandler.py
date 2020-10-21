@@ -29,12 +29,9 @@ class TaskHandler:
                     link = f'{self.__config["input_output"]["folder_path"]}/{task_values["fileName"]}.gpkg'
                     doc = {
                         "params": {
-                            "taskId": task_values["taskId"],
                             "status": Status.COMPLETED.value,
                             "progress": 100,
                             "lastUpdateTime": str(datetime.now()),
-                            "fileName": task_values["fileName"],
-                            "status": Status.COMPLETED.value,
                             "ling": link
                         }
                     }
