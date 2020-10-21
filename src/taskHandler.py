@@ -32,7 +32,7 @@ class TaskHandler:
                             "status": Status.COMPLETED.value,
                             "progress": 100,
                             "lastUpdateTime": str(datetime.now()),
-                            "ling": link
+                            "link": link
                         }
                     }
                     self.__helper.update_db(doc)
