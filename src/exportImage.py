@@ -36,7 +36,9 @@ class ExportImage:
                     "fileName": filename
                 }
             }
+
             self.__helper.update_db(doc)
+
             raise e
 
     def progress_callback(self, complete, message, unknown):
@@ -52,6 +54,3 @@ class ExportImage:
         }
 
         self.__helper.update_db(doc)
-
-
-
