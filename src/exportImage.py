@@ -24,6 +24,7 @@ class ExportImage:
                       'callback_data': es_obj}
 
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
+
             if result is not None:
                 link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
                 doc = {
