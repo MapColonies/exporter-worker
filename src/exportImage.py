@@ -14,6 +14,7 @@ class ExportImage:
         self.__config = read_config()
 
     def export(self, bbox, filename, url, taskid):
+        gdal.UseExceptions()
         try:
             es_obj = {"taskId": taskid, "filename": filename}
             self.logger.info(f'Task Id "{taskid}" in progress.')
@@ -22,7 +23,6 @@ class ExportImage:
                       'outputBounds': bbox,
                       'callback': self.progress_callback,
                       'callback_data': es_obj}
-
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
 
             if result is not None:
@@ -36,11 +36,11 @@ class ExportImage:
                         "link": link
                     }
                 }
+
                 self.__helper.update_db(doc)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
-            self.logger.error(f'Error occurred while exporting: {e}.')
             doc = {
                 "params": {
                     "taskId": taskid,
