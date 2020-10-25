@@ -26,13 +26,13 @@ class Helper:
             raise ValueError(f"Json validation failed: {e}")
 
     def update_db(self, doc):
-        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={doc["params"]["taskId"]}'
+        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={doc["taskId"]}'
         try:
             headers = {"Content-Type": "application/json"}
 
-            self.logger.info(f'Task Id "{doc["params"]["taskId"]}" Updating database')
+            self.logger.info(f'Task Id "{doc["taskId"]}" Updating database')
             requests.post(url=url, data=json.dumps(doc), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
-            self.logger.error(f'Task Id "{doc["params"]["taskId"]}" Failed to update database: {e}')
+            self.logger.error(f'Task Id "{doc["taskId"]}" Failed to update database: {e}')
