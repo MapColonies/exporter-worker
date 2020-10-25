@@ -28,13 +28,11 @@ class ExportImage:
             if result is not None:
                 link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
                 doc = {
-                    "params": {
-                        "taskId": taskid,
-                        "status": Status.COMPLETED.value,
-                        "progress": 100,
-                        "lastUpdateTime": str(datetime.now()),
-                        "link": link
-                    }
+                    "taskId": taskid,
+                    "status": Status.COMPLETED.value,
+                    "progress": 100,
+                    "lastUpdateTime": str(datetime.now()),
+                    "link": link
                 }
                 self.__helper.update_db(doc)
                 self.logger.info(f'Task Id "{taskid}" is done.')
@@ -42,12 +40,10 @@ class ExportImage:
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
             doc = {
-                "params": {
-                    "taskId": taskid,
-                    "status": Status.FAILED.value,
-                    "lastUpdateDate": str(datetime.now()),
-                    "fileName": filename
-                }
+                "taskId": taskid,
+                "status": Status.FAILED.value,
+                "lastUpdateDate": str(datetime.now()),
+                "fileName": filename
             }
             self.__helper.update_db(doc)
             raise e
@@ -55,13 +51,11 @@ class ExportImage:
     def progress_callback(self, complete, message, unknown):
         percent = floor(complete * 100)
         doc = {
-            "params": {
-                "taskId": unknown["taskId"],
-                "status": Status.IN_PROGRESS.value,
-                "progress": percent,
-                "lastUpdateTime": str(datetime.now()),
-                "fileName": unknown["filename"]
-            }
+            "taskId": unknown["taskId"],
+            "status": Status.IN_PROGRESS.value,
+            "progress": percent,
+            "lastUpdateTime": str(datetime.now()),
+            "fileName": unknown["filename"]
         }
 
         self.__helper.update_db(doc)
