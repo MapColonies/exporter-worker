@@ -2,6 +2,7 @@ import json
 from src.config import read_config
 from log.logger import Logger
 import requests
+from datetime import datetime
 
 
 class Helper:
@@ -31,8 +32,13 @@ class Helper:
             headers = {"Content-Type": "application/json"}
 
             self.logger.info(f'Task Id "{doc["taskId"]}" Updating database')
-            requests.post(url=url, data=json.dumps(doc), headers=headers)
+
+            requests.post(url=url, data=json.dumps(doc, default=self.json_converter), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
             self.logger.error(f'Task Id "{doc["taskId"]}" Failed to update database: {e}')
+
+    def json_converter(self, field):
+        if isinstance(field, datetime):
+            return field.isoformat()
