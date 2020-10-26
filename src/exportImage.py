@@ -31,7 +31,7 @@ class ExportImage:
                     "taskId": taskid,
                     "status": Status.COMPLETED.value,
                     "progress": 100,
-                    "lastUpdateTime": datetime.now(),
+                    "lastUpdateTime": datetime.utcnow(),
                     "link": link
                 }
 
@@ -42,7 +42,7 @@ class ExportImage:
             doc = {
                 "taskId": taskid,
                 "status": Status.FAILED.value,
-                "lastUpdateTime": datetime.now(),
+                "lastUpdateTime": datetime.utcnow(),
                 "fileName": filename
             }
             self.__helper.update_db(doc)
@@ -54,7 +54,7 @@ class ExportImage:
             "taskId": unknown["taskId"],
             "status": Status.IN_PROGRESS.value,
             "progress": percent,
-            "lastUpdateTime": datetime.now(),
+            "lastUpdateTime": datetime.utcnow(),
             "fileName": unknown["filename"]
         }
         self.__helper.update_db(doc)
