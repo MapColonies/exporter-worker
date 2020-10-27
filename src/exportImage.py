@@ -22,7 +22,10 @@ class ExportImage:
                       'format': self.__config['input_output']['output_format'],
                       'outputBounds': bbox,
                       'callback': self.progress_callback,
-                      'callback_data': es_obj}
+                      'callback_data': es_obj,
+                      'xRes': 1.67638063430786e-07,
+                      'yRes': 1.67638063430786e-07,
+                      'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
 
             if result is not None:
