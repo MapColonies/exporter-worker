@@ -42,3 +42,12 @@ class Helper:
     def json_converter(self, field):
         if isinstance(field, datetime):
             return field.isoformat()
+
+    def valid_configuration(self, keys):
+        value = self.__config[keys[0]][keys[1]]
+        print(value)
+        if value:
+            self.logger.info(f'{keys[1]} is set to {value}')
+        else:
+            raise ValueError(f'Bad Configuration - no value for {keys[1]} variable.')
+
