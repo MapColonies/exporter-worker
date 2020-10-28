@@ -1,4 +1,4 @@
-from osgeo import gdal
+from osgeo import gdal, ogr
 from math import floor
 from log.logger import Logger
 from src.config import read_config
@@ -37,6 +37,11 @@ class ExportImage:
                     "lastUpdateTime": datetime.utcnow(),
                     "link": link
                 }
+
+                driver = ogr.GetDriverByName("GPKG")
+                data_source = driver.Open(link, update=True)
+                sql = f'CREATE unique INDEX tiles_index on {filename}(zoom_level, tile_column, tile_row)'
+                data_source.ExecuteSQL(sql)
 
                 self.__helper.update_db(doc)
                 self.logger.info(f'Task Id "{taskid}" is done.')
