@@ -76,7 +76,7 @@ def runConfd():
     print('confd failed to run');
 
 def createTargetDir():
-  createDirIfNotExists('config')
+  createDirIfNotExists('../config')
 
 def help ():
   print('usage: "node <path to this script> [options]\n')

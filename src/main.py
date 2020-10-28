@@ -15,12 +15,18 @@ class Main:
 
 
     def _start_service(self):
+
         self.logger.info(f'Service is listening to broker: {self.__config["kafka"]["host_ip"]},'f' topic: {self.__config["kafka"]["topic"]}')
         try:
+            if self.__config["input_output"]["shared_folder"]:
+                print(f'shared_folder exists: {self.__config["input_output"]["shared_folder"]}')
+            else:
+                raise Exception('Bad Configuration - no value for SHARED_FOLDER variable.')
             self.__taskHandler.handle_tasks()
         except Exception as e:
             self.logger.error(f'Error occurred during running service: {e}')
             probe.liveness = False
+
 
 
 service_thread = threading.Thread(target=Main()._start_service)

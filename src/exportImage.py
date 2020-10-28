@@ -13,7 +13,7 @@ class ExportImage:
         self.__helper = Helper()
         self.__config = read_config()
 
-    def export(self, bbox, filename, url, taskid):
+    def export(self, bbox, filename, url, taskid, directoryName):
         gdal.UseExceptions()
         try:
             es_obj = {"taskId": taskid, "filename": filename}
@@ -29,7 +29,7 @@ class ExportImage:
             result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
 
             if result is not None:
-                link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
+                link = f'{self.__config["input_output"]["shared_folder"]}/{directoryName}/{filename}.gpkg'
                 doc = {
                     "taskId": taskid,
                     "status": Status.COMPLETED.value,
