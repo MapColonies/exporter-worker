@@ -67,8 +67,8 @@ class Helper:
         try:
             if path.isdir(dirPath) is False:
                 mkdir(dirPath)
-                self.logger.info(f'Successfully created the directory {path}')
+                self.logger.info(f'Successfully created the directory {dirPath}')
         except OSError as e:
-            self.logger.error(f'Failed to create the directory {path}: {e}')
+            self.logger.error(f'Failed to create the directory {dirPath}: {e}')
 
 
