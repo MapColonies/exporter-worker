@@ -21,6 +21,7 @@ class ExportImage:
             if result is not None:
                 link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
 
+                self.create_index(filename, link)
                 self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename,100, link)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
@@ -45,4 +46,12 @@ class ExportImage:
                   'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
         result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
         return result
+
+    def create_index(self, filename, link):
+        driver = ogr.GetDriverByName("GPKG")
+        data_source = driver.Open(link, update=True)
+        sql = f'CREATE unique INDEX tiles_index on {filename}(zoom_level, tile_column, tile_row)'
+        data_source.ExecuteSQL(sql)
+
+
 
