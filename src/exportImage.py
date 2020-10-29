@@ -16,14 +16,15 @@ class ExportImage:
     def export(self, bbox, filename, url, taskid, directoryName):
         gdal.UseExceptions()
         try:
-            result = self.create_geopackage(bbox, filename, url, taskid)
+            self.__helper.create_folder_if_not_exists(f'{self.__config["input_output"]["folder_path"]}/{directoryName}')
+            result = self.create_geopackage(bbox, filename, url, taskid, directoryName)
 
             if result is not None:
-                #TODO: wehn trigger update directory name, change link.
-                link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
+                #TODO: when trigger update directory name, change link.
+                link = f'{self.__config["input_output"]["folder_path"]}/{directoryName}/{filename}.gpkg'
 
                 self.create_index(filename, link)
-                self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename,100, link)
+                self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename, 100, link)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
@@ -34,7 +35,7 @@ class ExportImage:
         percent = floor(complete * 100)
         self.__helper.save_update(unknown["taskId"], Status.IN_PROGRESS.value, datetime.utcnow(), unknown["filename"], percent)
 
-    def create_geopackage(self,bbox, filename, url, taskid):
+    def create_geopackage(self, bbox, filename, url, taskid, directoryName):
         es_obj = {"taskId": taskid, "filename": filename}
         self.logger.info(f'Task Id "{taskid}" in progress.')
         kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
@@ -45,7 +46,7 @@ class ExportImage:
                   'xRes': 1.67638063430786e-07,
                   'yRes': 1.67638063430786e-07,
                   'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
-        result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
+        result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{directoryName}/{filename}.gpkg', url, **kwargs)
         return result
 
     def create_index(self, filename, link):

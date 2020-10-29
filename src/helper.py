@@ -1,3 +1,4 @@
+from os import mkdir
 import json
 from src.config import read_config
 from log.logger import Logger
@@ -61,4 +62,12 @@ class Helper:
             self.logger.info(f'{keys[1]} is set to {value}')
         else:
             raise ValueError(f'Bad Configuration - no value for {keys[1]} variable.')
+
+    def create_folder_if_not_exists(self, path):
+        try:
+            mkdir(path)
+        except OSError as e:
+            self.logger.error(f'Creation of the directory {path} failed: {e}')
+        else:
+            self.logger.info(f'Successfully created the directory {path}')
 
