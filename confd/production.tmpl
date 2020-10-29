@@ -11,8 +11,7 @@
     "input_output": {
         "output_srs": "{{ getv "/input/output/output/srs" "EPSG:4326" }}",
         "output_format": "{{ getv "/input/output/output/format" "GPKG" }}",
-        "folder_path": "{{ getv "/input/output/folder/path" "./outputs" }}",
-        "shared_folder": "{{ getv "/input/output/shared/folder" "default"}}"
+        "shared_folder": "{{ getv "/input/output/shared/folder" "./outputs"}}"
     },
     "logger": {
         "level": "{{ getv "/logger/level" "INFO" }}",

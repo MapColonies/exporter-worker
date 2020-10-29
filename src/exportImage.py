@@ -16,12 +16,12 @@ class ExportImage:
     def export(self, bbox, filename, url, taskid, directoryName):
         gdal.UseExceptions()
         try:
-            self.__helper.create_folder_if_not_exists(f'{self.__config["input_output"]["folder_path"]}/{directoryName}')
+            self.__helper.create_folder_if_not_exists(f'{self.__config["input_output"]["shared_folder"]}/{directoryName}')
             result = self.create_geopackage(bbox, filename, url, taskid, directoryName)
 
             if result is not None:
                 #TODO: when trigger update directory name, change link.
-                link = f'{self.__config["input_output"]["folder_path"]}/{directoryName}/{filename}.gpkg'
+                link = f'{self.__config["input_output"]["shared_folder"]}/{directoryName}/{filename}.gpkg'
 
                 self.create_index(filename, link)
                 self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename, 100, link)
@@ -46,7 +46,7 @@ class ExportImage:
                   'xRes': 1.67638063430786e-07,
                   'yRes': 1.67638063430786e-07,
                   'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
-        result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{directoryName}/{filename}.gpkg', url, **kwargs)
+        result = gdal.Warp(f'{self.__config["input_output"]["shared_folder"]}/{directoryName}/{filename}.gpkg', url, **kwargs)
         return result
 
     def create_index(self, filename, link):
