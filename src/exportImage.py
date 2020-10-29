@@ -20,10 +20,10 @@ class ExportImage:
             result = self.create_geopackage(bbox, filename, url, taskid, directoryName)
 
             if result is not None:
-                link = f'{self.__config["input_output"]["shared_folder"]}/{directoryName}/{filename}.gpkg'
+                full_path = f'{self.__config["input_output"]["shared_folder"]}/{directoryName}/{filename}.gpkg'
 
-                self.create_index(filename, link)
-                self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename, 100, link)
+                self.create_index(filename, full_path)
+                self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename, 100, full_path)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
