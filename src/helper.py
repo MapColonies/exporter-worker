@@ -43,7 +43,7 @@ class Helper:
         try:
             headers = {"Content-Type": "application/json"}
 
-            self.logger.info(f'Task Id "{taskId}" Updating database')
+            self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
 
             requests.post(url=url, data=json.dumps(doc, default=self.json_converter), headers=headers)
         except ConnectionError as ce:
