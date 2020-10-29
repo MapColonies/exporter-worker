@@ -20,7 +20,6 @@ class ExportImage:
             result = self.create_geopackage(bbox, filename, url, taskid, directoryName)
 
             if result is not None:
-                #TODO: when trigger update directory name, change link.
                 link = f'{self.__config["input_output"]["shared_folder"]}/{directoryName}/{filename}.gpkg'
 
                 self.create_index(filename, link)
