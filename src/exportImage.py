@@ -13,12 +13,13 @@ class ExportImage:
         self.__helper = Helper()
         self.__config = read_config()
 
-    def export(self, bbox, filename, url, taskid):
+    def export(self, bbox, filename, url, taskid, directoryName):
         gdal.UseExceptions()
         try:
             result = self.create_geopackage(bbox, filename, url, taskid)
 
             if result is not None:
+                #TODO: wehn trigger update directory name, change link.
                 link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
 
                 self.create_index(filename, link)

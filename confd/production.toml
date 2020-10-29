@@ -12,6 +12,7 @@ keys = [
     "/input_output/output_srs",
     "/input_output/output_format",
     "/input_output/folder_path",
+    "/input_output/shared_folder",
     "/logger/level",
     "/logger/date_format",
     "/logger/filename",
