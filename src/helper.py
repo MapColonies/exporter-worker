@@ -26,19 +26,31 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def update_db(self, doc):
-        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={doc["taskId"]}'
+    def save_update(self, taskId, status, lastUpdateTime, fileName, progress=None, link=None):
+        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
+        doc = {
+            "taskId": taskId,
+            "status": status,
+            "lastUpdateTime": lastUpdateTime,
+            "fileName": fileName
+        }
+        if progress is not None:
+            doc["progress"] = progress
+        if link is not None:
+            doc["link"] = link
+
         try:
             headers = {"Content-Type": "application/json"}
 
-            self.logger.info(f'Task Id "{doc["taskId"]}" Updating database')
+            self.logger.info(f'Task Id "{taskId}" Updating database')
 
             requests.post(url=url, data=json.dumps(doc, default=self.json_converter), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
-            self.logger.error(f'Task Id "{doc["taskId"]}" Failed to update database: {e}')
+            self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
 
     def json_converter(self, field):
         if isinstance(field, datetime):
             return field.isoformat()
+

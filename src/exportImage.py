@@ -1,4 +1,4 @@
-from osgeo import gdal
+from osgeo import gdal, ogr
 from math import floor
 from log.logger import Logger
 from src.config import read_config
@@ -16,49 +16,33 @@ class ExportImage:
     def export(self, bbox, filename, url, taskid):
         gdal.UseExceptions()
         try:
-            es_obj = {"taskId": taskid, "filename": filename}
-            self.logger.info(f'Task Id "{taskid}" in progress.')
-            kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
-                      'format': self.__config['input_output']['output_format'],
-                      'outputBounds': bbox,
-                      'callback': self.progress_callback,
-                      'callback_data': es_obj,
-                      'xRes': 1.67638063430786e-07,
-                      'yRes': 1.67638063430786e-07,
-                      'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
-            result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
+            result = self.create_geopackage(bbox, filename, url, taskid)
 
             if result is not None:
                 link = f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg'
-                doc = {
-                    "taskId": taskid,
-                    "status": Status.COMPLETED.value,
-                    "progress": 100,
-                    "lastUpdateTime": datetime.utcnow(),
-                    "link": link
-                }
 
-                self.__helper.update_db(doc)
+                self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename,100, link)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
-            doc = {
-                "taskId": taskid,
-                "status": Status.FAILED.value,
-                "lastUpdateTime": datetime.utcnow(),
-                "fileName": filename
-            }
-            self.__helper.update_db(doc)
+            self.__helper.save_update(taskid, Status.FAILED.value, datetime.utcnow(), filename)
             raise e
 
     def progress_callback(self, complete, message, unknown):
         percent = floor(complete * 100)
-        doc = {
-            "taskId": unknown["taskId"],
-            "status": Status.IN_PROGRESS.value,
-            "progress": percent,
-            "lastUpdateTime": datetime.utcnow(),
-            "fileName": unknown["filename"]
-        }
-        self.__helper.update_db(doc)
+        self.__helper.save_update(unknown["taskId"], Status.IN_PROGRESS.value, datetime.utcnow(), unknown["filename"], percent)
+
+    def create_geopackage(self,bbox, filename, url, taskid):
+        es_obj = {"taskId": taskid, "filename": filename}
+        self.logger.info(f'Task Id "{taskid}" in progress.')
+        kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
+                  'format': self.__config['input_output']['output_format'],
+                  'outputBounds': bbox,
+                  'callback': self.progress_callback,
+                  'callback_data': es_obj,
+                  'xRes': 1.67638063430786e-07,
+                  'yRes': 1.67638063430786e-07,
+                  'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
+        result = gdal.Warp(f'{self.__config["input_output"]["folder_path"]}/{filename}.gpkg', url, **kwargs)
+        return result
 
