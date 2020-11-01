@@ -1,7 +1,6 @@
 FROM osgeo/gdal:alpine-normal-3.1.3
 RUN mkdir /app
 WORKDIR /app
-COPY
 RUN apk update -q --no-cache \
     && apk add -q --no-cache python3 py3-pip
 COPY . .
