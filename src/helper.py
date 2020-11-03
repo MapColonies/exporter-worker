@@ -28,24 +28,24 @@ class Helper:
             raise ValueError(f"Json validation failed: {e}")
 
     def save_update(self, taskId, status, lastUpdateTime, fileName, progress=None, link=None):
-        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
+        url = f'http://127.0.0.1:8081/statuses'
         doc = {
             "taskId": taskId,
             "status": status,
-            "lastUpdateTime": lastUpdateTime,
+            "updatedTime": lastUpdateTime,
             "fileName": fileName
         }
         if progress is not None:
             doc["progress"] = progress
         if link is not None:
-            doc["link"] = link
+            doc["fileURI"] = link
 
         try:
             headers = {"Content-Type": "application/json"}
 
             self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
 
-            requests.post(url=url, data=json.dumps(doc, default=self.json_converter), headers=headers)
+            requests.put(url=url, data=json.dumps(doc, default=self.json_converter), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
