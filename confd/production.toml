@@ -18,7 +18,6 @@ keys = [
     "/logger/format",
     "/task_fields",
     "/probe/host_ip",
-    "/es/port",
-    "/es/index",
-    "/es/host_ip"
+    "/commonstorage/port",
+    "/commonstorage/host_ip"
 ]

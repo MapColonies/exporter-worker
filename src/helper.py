@@ -10,9 +10,8 @@ class Helper:
     def __init__(self):
         self.__config = read_config()
         self.logger = Logger()
-        self.index = self.__config["es"]["index"]
-        self.hostip = self.__config["es"]["host_ip"]
-        self.port = self.__config["es"]["port"]
+        self.hostip = self.__config["commonstorage"]["host_ip"]
+        self.port = self.__config["commonstorage"]["port"]
 
     def load_json(self, task):
         parsed_json = json.loads(task)
@@ -28,7 +27,7 @@ class Helper:
             raise ValueError(f"Json validation failed: {e}")
 
     def save_update(self, taskId, status, lastUpdateTime, fileName, progress=None, link=None):
-        url = f'http://127.0.0.1:8081/statuses'
+        url = f'http://{self.hostip}:{self.port}/statuses'
         doc = {
             "taskId": taskId,
             "status": status,
