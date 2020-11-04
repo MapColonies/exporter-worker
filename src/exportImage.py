@@ -24,16 +24,16 @@ class ExportImage:
 
             if result is not None:
                 self.create_index(filename, full_path)
-                self.__helper.save_update(taskid, Status.COMPLETED.value, datetime.utcnow(), filename, 100, full_path)
+                self.__helper.save_update(taskid, Status.COMPLETED.value, filename, 100, full_path)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:
-            self.__helper.save_update(taskid, Status.FAILED.value, datetime.utcnow(), filename)
+            self.__helper.save_update(taskid, Status.FAILED.value, filename)
             raise e
 
     def progress_callback(self, complete, message, unknown):
         percent = floor(complete * 100)
-        self.__helper.save_update(unknown["taskId"], Status.IN_PROGRESS.value, datetime.utcnow(), unknown["filename"], percent)
+        self.__helper.save_update(unknown["taskId"], Status.IN_PROGRESS.value, unknown["filename"], percent)
 
     def create_geopackage(self, bbox, filename, url, taskid, fullPath):
         output_format = self.__config["input_output"]["output_format"]
