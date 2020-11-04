@@ -50,9 +50,9 @@ class ExportImage:
         result = gdal.Warp(fullPath, url, **kwargs)
         return result
 
-    def create_index(self, filename, link):
+    def create_index(self, filename, fullPath):
         driver = ogr.GetDriverByName("GPKG")
-        data_source = driver.Open(link, update=True)
+        data_source = driver.Open(fullPath, update=True)
         sql = f'CREATE unique INDEX tiles_index on {filename}(zoom_level, tile_column, tile_row)'
         data_source.ExecuteSQL(sql)
 
