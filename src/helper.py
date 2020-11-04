@@ -10,8 +10,7 @@ class Helper:
     def __init__(self):
         self.__config = read_config()
         self.logger = Logger()
-        self.hostip = self.__config["commonstorage"]["host_ip"]
-        self.port = self.__config["commonstorage"]["port"]
+        self.url = self.__config["commonstorage"]["url"]
 
     def load_json(self, task):
         parsed_json = json.loads(task)
@@ -26,12 +25,13 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, lastUpdateTime, fileName, progress=None, link=None):
-        url = f'http://{self.hostip}:{self.port}/statuses'
+    def save_update(self, taskId, status, fileName, progress=None, link=None):
+        updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+        url = f'{self.url}/statuses'
         doc = {
             "taskId": taskId,
             "status": status,
-            "updatedTime": lastUpdateTime,
+            "updatedTime": updated_time,
             "fileName": fileName
         }
         if progress is not None:
@@ -44,7 +44,7 @@ class Helper:
 
             self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
 
-            requests.put(url=url, data=json.dumps(doc, default=self.json_converter), headers=headers)
+            requests.put(url=url, data=json.dumps(doc), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
@@ -69,5 +69,4 @@ class Helper:
                 self.logger.info(f'Successfully created the directory {dirPath}')
         except OSError as e:
             self.logger.error(f'Failed to create the directory {dirPath}: {e}')
-
 

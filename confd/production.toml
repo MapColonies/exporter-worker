@@ -5,7 +5,6 @@ keys = [
 	"/kafka/host_ip",
     "/kafka/topic",
     "/kafka/group_id",
-    "/kafka/auto_commit",
     "/kafka/offset_reset",
     "/kafka/poll_timeout_milliseconds",
     "/kafka/poll_records",
@@ -17,7 +16,5 @@ keys = [
     "/logger/filename",
     "/logger/format",
     "/task_fields",
-    "/probe/host_ip",
-    "/commonstorage/port",
-    "/commonstorage/host_ip"
+    "/commonstorage/url"
 ]
