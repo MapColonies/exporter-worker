@@ -25,9 +25,10 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, link=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
         url = f'{self.url}/statuses'
+        
         doc = {
             "taskId": taskId,
             "status": status,
@@ -36,8 +37,12 @@ class Helper:
         }
         if progress is not None:
             doc["progress"] = progress
-        if link is not None:
-            doc["fileURI"] = link
+        if fullPath is not None:
+            file_size = path.getsize(fullPath)
+            actual_size = self._convert_and_round_filesize(file_size)
+            doc["fileURI"] = fullPath
+            doc["realFileSize"] = actual_size
+
 
         try:
             headers = {"Content-Type": "application/json"}
@@ -70,3 +75,9 @@ class Helper:
         except OSError as e:
             self.logger.error(f'Failed to create the directory {dirPath}: {e}')
 
+    def _convert_and_round_filesize(self, filesize):
+        # convert the real filesize from bytes to mb
+        actual_size_mb = filesize / (1 << 20)
+        # round up the converted number
+        rounded_size = round(actual_size_mb + 0.005, 2)
+        return rounded_size
