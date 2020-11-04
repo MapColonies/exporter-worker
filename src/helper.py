@@ -10,9 +10,7 @@ class Helper:
     def __init__(self):
         self.__config = read_config()
         self.logger = Logger()
-        self.index = self.__config["es"]["index"]
-        self.hostip = self.__config["es"]["host_ip"]
-        self.port = self.__config["es"]["port"]
+        self.url = self.__config["commonstorage"]["url"]
 
     def load_json(self, task):
         parsed_json = json.loads(task)
@@ -29,7 +27,7 @@ class Helper:
 
     def save_update(self, taskId, status, fileName, progress=None, link=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
-        url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
+        url = f'{self.url}/statuses'
         doc = {
             "taskId": taskId,
             "status": status,
@@ -46,7 +44,7 @@ class Helper:
 
             self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
 
-            requests.post(url=url, data=json.dumps(doc), headers=headers)
+            requests.put(url=url, data=json.dumps(doc), headers=headers)
         except ConnectionError as ce:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
@@ -71,5 +69,4 @@ class Helper:
                 self.logger.info(f'Successfully created the directory {dirPath}')
         except OSError as e:
             self.logger.error(f'Failed to create the directory {dirPath}: {e}')
-
 

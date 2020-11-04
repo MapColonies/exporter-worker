@@ -1,8 +1,6 @@
 from flask import Flask
-from src.config import read_config
 app = Flask(__name__)
-__config = read_config()
-host_ip = __config['probe']['host_ip']
+host_ip = "0.0.0.0"
 liveness = True
 readiness = True
 
