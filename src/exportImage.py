@@ -57,4 +57,3 @@ class ExportImage:
         data_source.ExecuteSQL(sql)
 
 
-
