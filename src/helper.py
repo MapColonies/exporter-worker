@@ -29,6 +29,7 @@ class Helper:
 
     def save_update(self, taskId, status, fileName, progress=None, link=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
+
         url = f'http://{self.hostip}:{self.port}/indexes/{self.index}/document?taskId={taskId}'
         doc = {
             "taskId": taskId,
@@ -39,7 +40,11 @@ class Helper:
         if progress is not None:
             doc["progress"] = progress
         if link is not None:
+            file_size = path.getsize(link)
+            actual_size = self._convert_and_round_filesize(file_size)
             doc["fileURI"] = link
+            doc["realFileSize"] = actual_size
+
 
         try:
             headers = {"Content-Type": "application/json"}
@@ -72,4 +77,9 @@ class Helper:
         except OSError as e:
             self.logger.error(f'Failed to create the directory {dirPath}: {e}')
 
-
+    def _convert_and_round_filesize(self, filesize):
+        # convert the real filesize from bytes to mb
+        actual_size_mb = filesize / (1 << 20)
+        # round up the converted number
+        rounded_size = round(actual_size_mb + 0.005, 2)
+        return rounded_size
