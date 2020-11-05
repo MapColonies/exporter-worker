@@ -13,9 +13,8 @@ class TaskHandler:
         self.logger = Logger()
         self.__config = read_config()
 
-
     def handle_tasks(self):
-        consumer = KafkaConsumer(bootstrap_servers=[self.__config['kafka']['host_ip']],
+        consumer = KafkaConsumer(bootstrap_servers=self.__config['kafka']['host_ip'],
                                  enable_auto_commit=False,
                                  max_poll_interval_ms=self.__config['kafka']['poll_timeout_milliseconds'],
                                  max_poll_records=self.__config['kafka']['poll_records'],
@@ -39,7 +38,7 @@ class TaskHandler:
             task_values = self.__helper.load_json(task.value)
             self.__helper.json_fields_validate(task_values)
             self.logger.info(f'Task Id "{task_values["taskId"]}" received.')
-            return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"], task_values["directoryName"])
+            return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"], "NewDirectory")
         except Exception as e:
             self.logger.error(f'Error occurred while exporting: {e}.')
 

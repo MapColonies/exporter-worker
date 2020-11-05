@@ -1,2 +1,2 @@
 #!/bin/bash
-docker run -d --name exporter-worker -v /home/ubuntu/exporter-worker/src/outputs:/app/src/outputs exporter_worker:latest
+docker run -d --name exporter-worker -v /home/ubuntu/exporter-worker/outputs:/app/outputs exporter-worker:latest

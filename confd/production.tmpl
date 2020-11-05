@@ -1,6 +1,6 @@
 {
     "kafka" : {
-        "host_ip": "{{ getv "/kafka/host/ip" "10.28.11.49:9092" }}",
+        "host_ip": {{ getv "/kafka/host/ip" "[\"10.28.11.49:9092\"]" }},
         "topic": "{{ getv "/kafka/topic" "topic-test-888" }}",
         "group_id": "{{ getv "/kafka/group/id" "task_group_1" }}",
         "offset_reset": "{{ getv "/kafka/offest/reset" "latest" }}",
@@ -14,12 +14,10 @@
     },
     "logger": {
         "level": "{{ getv "/logger/level" "INFO" }}",
-        "date_format": "{{ getv "/logger/date/format" "%Y-%m-%d %H:%M:%S" }}",
-        "filename": "{{ getv "/logger/filename" "ew_logs.log"}}",
-        "format": "{{ getv "/logger/format" "%(asctime)s [%(levelname)s]  %(message)s" }}"
+        "filename": "{{ getv "/logger/filename" "ew_logs.log"}}"
     },
-    "task_fields": {{ getv "/task/fields" "[\"fileName\", \"url\", \"bbox\", \"taskId\"]" }},
     "commonstorage": {
-        "url": "{{ getv "/commonstorage/host/ip" "http://127.0.0.1:8081" }}"
-    }
+        "url": "{{ getv "/commonstorage/url" "http://127.0.0.1:8081" }}"
+    },
+    "mandatory_task_fields": ["fileName", "url", "bbox", "taskId", "directoryName"]
 }

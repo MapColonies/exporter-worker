@@ -6,11 +6,13 @@ from src.config import read_config
 class Logger:
     def __init__(self):
         self.__config = read_config()
+        self.date_format = "%Y-%m-%d %H:%M:%S"
+        self.log_format = "%(asctime)s [%(levelname)s]  %(message)s"
 
         logging.basicConfig(level=self.__config['logger']['level'],
                             filename=self.__config['logger']['filename'],
-                            datefmt=self.__config['logger']['date_format'],
-                            format=self.__config['logger']['format'])
+                            format=self.log_format,
+                            datefmt=self.date_format)
         self.log = logging.getLogger(__name__)
         self._create_file_handler()
 
@@ -19,7 +21,7 @@ class Logger:
             self.log.handlers = []
         file_handle = logging.FileHandler(self.__config['logger']['filename'])
         file_handle.setStream(stdout)
-        file_handle.setFormatter(logging.Formatter(self.__config['logger']['format']))
+        file_handle.setFormatter(logging.Formatter(self.log_format))
         self.log.addHandler(file_handle)
 
     def warning(self, msg):
