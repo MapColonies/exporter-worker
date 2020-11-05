@@ -6,6 +6,7 @@ dist
 *.egg/
 *.pyc
 *.swp
+config
 
 .tox
 .coverage
