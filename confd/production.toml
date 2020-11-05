@@ -12,9 +12,6 @@ keys = [
     "/input_output/output_format",
     "/input_output/shared_folder",
     "/logger/level",
-    "/logger/date_format",
     "/logger/filename",
-    "/logger/format",
-    "/task_fields",
     "/commonstorage/url"
 ]

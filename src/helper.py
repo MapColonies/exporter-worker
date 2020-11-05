@@ -18,7 +18,7 @@ class Helper:
 
     def json_fields_validate(self, json_obj):
         try:
-            task_fields = self.__config['task_fields']
+            task_fields = self.__config['mandatory_task_fields']
             for field in task_fields:
                 if field not in json_obj:
                     raise ValueError(f'Missing field "{field}"')
@@ -42,11 +42,8 @@ class Helper:
             actual_size = self._convert_and_round_filesize(file_size)
             doc["fileURI"] = fullPath
             doc["realFileSize"] = actual_size
-
-
         try:
             headers = {"Content-Type": "application/json"}
-
             self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
 
             requests.put(url=url, data=json.dumps(doc), headers=headers)

@@ -13,9 +13,8 @@ class TaskHandler:
         self.logger = Logger()
         self.__config = read_config()
 
-
     def handle_tasks(self):
-        consumer = KafkaConsumer(bootstrap_servers=[self.__config['kafka']['host_ip']],
+        consumer = KafkaConsumer(bootstrap_servers=self.__config['kafka']['host_ip'],
                                  enable_auto_commit=False,
                                  max_poll_interval_ms=self.__config['kafka']['poll_timeout_milliseconds'],
                                  max_poll_records=self.__config['kafka']['poll_records'],
