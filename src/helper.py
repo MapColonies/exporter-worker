@@ -39,7 +39,7 @@ class Helper:
         if progress is not None:
             doc["progress"] = progress
         if fullPath is not None:
-            external_physical_path = f'{self.__config["input_output"]["external_physical_path"]}/{directoryName}/{fileName}'
+            external_physical_path = f'{self.__config["input_output"]["external_physical_path"]}/{directoryName}/{fileName}.{self.__config["input_output"]["output_format"]}'
             file_size = path.getsize(fullPath)
             actual_size = self._convert_and_round_filesize(file_size)
             doc["fileURI"] = external_physical_path
