@@ -27,6 +27,14 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: false
-          tags: exporter-worker:latest
+          tags: 645470188746.dkr.ecr.eu-west-1.amazonaws.com/exporter-worker:latest
       #- name: Image digest
       #  run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: Push to ECR
+        id: ecr_push
+        uses: jwalton/gh-ecr-push@v1
+        with:
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: eu-west-1
+          image: my-image:v1      
