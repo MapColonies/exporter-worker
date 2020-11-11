@@ -30,15 +30,13 @@ jobs:
       #     tags: 645470188746.dkr.ecr.eu-west-1.amazonaws.com/exporter-worker:latest
       #- name: Image digest
       #  run: echo ${{ steps.docker_build.outputs.digest }}
-      - name: upload image to ECR
-        uses: appleboy/docker-ecr-action@master
+      - run: docker build --tag exporter-worker:latest .
+      - name: Push to ECR
+        id: ecr
+        uses: jwalton/gh-ecr-push@v1
         with:
-          access_key: ${{ secrets.aws_access_key_id }}
-          secret_key: ${{ secrets.aws_secret_access_key }}
-          registry: 645470188746.dkr.ecr.eu-west-1.amazonaws.com
-          cache_from: ${{ secrets.cache }}
-          repo: exporter-worker:latest
-          region: eu-west-1
-          auto_tag: true
-          daemon_off: false
-          dockerfile: Dockerfile
+          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          region: eu-wast-1
+          local-image: exporter-worker:latest
+          image: 645470188746.dkr.ecr.eu-west-1.amazonaws.com/exporter-worker:latest
