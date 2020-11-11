@@ -38,12 +38,10 @@ jobs:
       #     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       #     region: eu-west-1
       #     image: my-image:v1
-      - run: docker build --tag exporter-worker:latest .
-      - name: Push to ECR
-        id: ecr
-        uses: jwalton/gh-ecr-push@v1
+      - name: upload image to ECR
+        uses: appleboy/docker-ecr-action@master
         with:
-          access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          region: eu-west-1
-          image: 645470188746.dkr.ecr.eu-west-1.amazonaws.com/exporter-worker:latest  
+          access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          repo: exporter-worker
+          registry: 645470188746.dkr.ecr.eu-west-1.amazonaws.com
