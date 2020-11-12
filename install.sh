@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build --no-cache -t exporter_worker:latest .
+docker build --no-cache -t exporter-worker:latest .
