@@ -10,7 +10,8 @@ keys = [
     "/kafka/poll_records",
     "/input_output/output_srs",
     "/input_output/output_format",
-    "/input_output/shared_folder",
+    "/input_output/external_physical_path",
+    "/input_output/internal_outputs_path",
     "/logger/level",
     "/logger/filename",
     "/commonstorage/url"

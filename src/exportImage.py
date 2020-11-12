@@ -17,14 +17,14 @@ class ExportImage:
     def export(self, bbox, filename, url, taskid, directoryName):
         gdal.UseExceptions()
         output_format = self.__config["input_output"]["output_format"]
-        full_path = f'{path.join(self.__config["input_output"]["shared_folder"], directoryName, filename)}.{output_format}'
+        full_path = f'{path.join(self.__config["input_output"]["internal_outputs_path"], directoryName, filename)}.{output_format}'
         try:
-            self.__helper.create_folder_if_not_exists(f'{self.__config["input_output"]["shared_folder"]}/{directoryName}')
+            self.__helper.create_folder_if_not_exists(f'{self.__config["input_output"]["internal_outputs_path"]}/{directoryName}')
             result = self.create_geopackage(bbox, filename, url, taskid, full_path)
 
             if result is not None:
                 self.create_index(filename, full_path)
-                self.__helper.save_update(taskid, Status.COMPLETED.value, filename, 100, full_path)
+                self.__helper.save_update(taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
                 self.logger.info(f'Task Id "{taskid}" is done.')
             return result
         except Exception as e:

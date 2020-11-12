@@ -9,7 +9,6 @@ COPY . .
 RUN apk del py3-pip
 ENV PYTHONPATH=${PYTHONPATH}:'/app'
 RUN python3 /app/confd/generate-config.py --environment production
-RUN mkdir /app/outputs
 WORKDIR /app/
 RUN chmod +x start.sh
 CMD ["sh", "start.sh"]
