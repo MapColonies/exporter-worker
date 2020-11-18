@@ -3,8 +3,8 @@
         "host_ip": {{ getv "/kafka/host/ip" "[\"10.28.11.49:9092\"]" }},
         "topic": "{{ getv "/kafka/topic" "topic-test-101" }}",
         "group_id": "{{ getv "/kafka/group/id" "task_group_1" }}",
-        "offset_reset": "{{ getv "/kafka/offest/reset" "latest" }}",
-        "poll_timeout_milliseconds": {{ getv "/kafka/poll/timeout/milliseconds" "270000000" }},
+        "offset_reset": "{{ getv "/kafka/offest/reset" "earliest" }}",
+        "poll_timeout_milliseconds": {{ getv "/kafka/poll/timeout/milliseconds" "8000" }},
         "poll_records": {{ getv "/kafka/poll/records" "1" }}
     },
     "input_output": {
@@ -20,5 +20,6 @@
     "commonstorage": {
         "url": "{{ getv "/commonstorage/url" "http://127.0.0.1:8080" }}"
     },
+    "max_attempts": {{ getv "/max/attempts" "3" }},
     "mandatory_task_fields": ["fileName", "url", "bbox", "taskId", "directoryName"]
 }

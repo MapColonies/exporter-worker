@@ -14,5 +14,6 @@ keys = [
     "/input_output/internal_outputs_path",
     "/logger/level",
     "/logger/filename",
+    "/max/attempts",
     "/commonstorage/url"
 ]

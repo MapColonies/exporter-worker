@@ -25,7 +25,7 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, fullPath=None , directoryName=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None , directoryName=None, attempts=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
         url = f'{self.url}/statuses'
@@ -44,6 +44,8 @@ class Helper:
             actual_size = self._convert_and_round_filesize(file_size)
             doc["fileURI"] = external_physical_path
             doc["realFileSize"] = actual_size
+        if attempts is not None:
+            doc["workerAttempts"] = attempts
         try:
             headers = {"Content-Type": "application/json"}
             self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
@@ -53,6 +55,17 @@ class Helper:
             self.logger.error(f'Database connection failed: {ce}')
         except Exception as e:
             self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
+
+    def get_status(self,taskId):
+        try:
+            self.logger.info(f'getting attmepts count for task "{taskId}"')
+            url = f'{self.url}/statuses/{taskId}'
+            res = requests.get(url=url)
+            return res.json()
+        except ConnectionError as ce:
+            self.logger.error(f'Database connection failed: {ce}')
+        except Exception as e:
+            self.logger.error(f'failed to retrieve attempt count for Task Id "{taskId}": {e}')
 
     def json_converter(self, field):
         if isinstance(field, datetime):
