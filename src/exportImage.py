@@ -1,16 +1,15 @@
 from osgeo import gdal, ogr
 from os import path
 from math import floor
-from log.logger import Logger
+from logger.jsonLogger import Logger
 from src.config import read_config
 from src.model.enum.status_enum import Status
-from datetime import datetime
 from src.helper import Helper
 
 
 class ExportImage:
     def __init__(self):
-        self.logger = Logger()
+        self.log = Logger.get_logger_instance()
         self.__helper = Helper()
         self.__config = read_config()
 
@@ -26,11 +25,11 @@ class ExportImage:
                 if result is not None:
                     self.create_index(filename, full_path)
                     self.__helper.save_update(taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
-                    self.logger.info(f'Task Id "{taskid}" is done.')
+                    self.log.info(f'Task Id "{taskid}" is done.')
                 return result
             except Exception as e:
                 self.__helper.save_update(taskid, Status.FAILED.value, filename)
-                self.logger.error(f'Error occurred while exporting: {e}.')
+                self.log.error(f'Error occurred while exporting: {e}.')
         return True  # if task shouldn't run it should be removed from queue
 
     def progress_callback(self, complete, message, unknown):
@@ -40,7 +39,7 @@ class ExportImage:
     def create_geopackage(self, bbox, filename, url, taskid, fullPath):
         output_format = self.__config["input_output"]["output_format"]
         es_obj = {"taskId": taskid, "filename": filename}
-        self.logger.info(f'Task Id "{taskid}" in progress.')
+        self.log.info(f'Task Id "{taskid}" in progress.')
         kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                   'format': output_format,
                   'outputBounds': bbox,
@@ -64,7 +63,7 @@ class ExportImage:
             return False
         attempts = int(status["workerAttempts"])
         if attempts >= self.__config["max_attempts"]:
-            self.logger.error(f'max attempts limit reached for task: "{taskId}"')
+            self.log.error(f'max attempts limit reached for task: "{taskId}"')
             self.__helper.save_update(taskId, Status.FAILED.value, filename)
             return False
         self.__helper.save_update(taskId, Status.IN_PROGRESS.value, filename, 0, None, None, attempts+1)
