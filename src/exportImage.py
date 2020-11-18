@@ -60,7 +60,7 @@ class ExportImage:
 
     def runPreperation(self, taskId, filename):
         status = self.__helper.get_status(taskId)
-        if status["status"] == Status.COMPLETED.value:
+        if status is None or status["status"] == Status.COMPLETED.value:
             return False
         attempts = int(status["workerAttempts"])
         if attempts >= self.__config["max_attempts"]:

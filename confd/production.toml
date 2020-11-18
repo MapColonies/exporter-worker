@@ -2,18 +2,18 @@
 src = "production.tmpl"
 dest = "./config/default.json"
 keys = [
-	"/kafka/host_ip",
-    "/kafka/topic",
-    "/kafka/group_id",
-    "/kafka/offset_reset",
-    "/kafka/poll_timeout_milliseconds",
-    "/kafka/poll_records",
-    "/input_output/output_srs",
-    "/input_output/output_format",
-    "/input_output/external_physical_path",
-    "/input_output/internal_outputs_path",
-    "/logger/level",
-    "/logger/filename",
-    "/max/attempts",
-    "/commonstorage/url"
+	"/configuration/exporter/worker/kafka/host_ip",
+    "/configuration/exporter/worker/kafka/topic",
+    "/configuration/exporter/worker/kafka/group_id",
+    "/configuration/exporter/worker/kafka/offset_reset",
+    "/configuration/exporter/worker/kafka/poll_timeout_milliseconds",
+    "/configuration/exporter/worker/kafka/poll_records",
+    "/configuration/exporter/worker/input_output/output_srs",
+    "/configuration/exporter/worker/input_output/output_format",
+    "/configuration/exporter/worker/input_output/external_physical_path",
+    "/configuration/exporter/worker/input_output/internal_outputs_path",
+    "/configuration/exporter/worker/logger/level",
+    "/configuration/exporter/worker/logger/filename",
+    "/configuration/exporter/worker/max/attempts",
+    "/configuration/exporter/worker/commonstorage/url"
 ]
