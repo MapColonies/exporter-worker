@@ -1,5 +1,5 @@
 from src.taskHandler import TaskHandler
-from log.logger import Logger
+from logger.jsonLogger import Logger
 from src.helper import Helper
 from src.config import read_config
 import src.probe as probe
@@ -9,7 +9,7 @@ import threading
 class Main:
     def __init__(self):
         self.__config = read_config()
-        self.logger = Logger()
+        self.log = Logger.get_logger_instance()
         self.__helper = Helper()
         self.__taskHandler = TaskHandler()
         probe.readiness = True
@@ -17,14 +17,14 @@ class Main:
 
 
     def _start_service(self):
-        self.logger.info(f'Service is listening to broker: {self.__config["kafka"]["host_ip"]},'f' topic: {self.__config["kafka"]["topic"]}')
+        self.log.info(f'Service is listening to broker: {self.__config["kafka"]["host_ip"]},'f' topic: {self.__config["kafka"]["topic"]}')
         try:
             self.__helper.create_folder_if_not_exists(self.__config["input_output"]["internal_outputs_path"])
             keys = ("input_output", "external_physical_path")
             self.__helper.valid_configuration(keys)
             self.__taskHandler.handle_tasks()
         except Exception as e:
-            self.logger.error(f'Error occurred during running service: {e}')
+            self.log.error(f'Error occurred during running service: {e}')
             probe.liveness = False
 
 

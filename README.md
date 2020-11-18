@@ -70,4 +70,4 @@ in dev mode you can just provide some random path (package will be created at th
     INPUT_OUTPUT_INTERNAL_OUTPUTS_PATH    select the directory name by full path that the worker will be generate the package to, deafult to '/repository/root/location/outputs', in docker: "/app/outputs"
     LOGGER_LEVEL    select the level of logs, default to 'INFO'
     LOGGER_FILENAME    select the log's file name
-    COMMONSTORAGE_URL    define the protocol, ip and port of the exported storage service, default to http://127.0.0.1:8080 , change if run on other port or on Docker.
+    EXPORTSTORAGE_URL    define the protocol, ip and port of the exported storage service, default to http://127.0.0.1:8080 , change if run on other port or on Docker.

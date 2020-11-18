@@ -2,7 +2,7 @@ from kafka import KafkaConsumer, BrokerConnection
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from src.exportImage import ExportImage
 from src.helper import Helper
-from log.logger import Logger
+from logger.jsonLogger import Logger
 from src.config import read_config
 
 
@@ -10,7 +10,7 @@ class TaskHandler:
     def __init__(self):
         self.__helper = Helper()
         self.__exportImage = ExportImage()
-        self.logger = Logger()
+        self.log = Logger.get_logger_instance()
         self.__config = read_config()
 
     def handle_tasks(self):
@@ -28,7 +28,7 @@ class TaskHandler:
                 if result is not None:
                     consumer.commit()
         except Exception as e:
-            self.logger.error(f'Error occurred: {e}.')
+            self.log.error(f'Error occurred: {e}.')
             raise e
         finally:
             consumer.close()
@@ -37,10 +37,10 @@ class TaskHandler:
         try:
             task_values = self.__helper.load_json(task.value)
             self.__helper.json_fields_validate(task_values)
-            self.logger.info(f'Task Id "{task_values["taskId"]}" received.')
+            self.log.info(f'Task Id "{task_values["taskId"]}" received.')
             return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"], task_values["directoryName"])
         except Exception as e:
-            self.logger.error(f'Error occurred while exporting: {e}.')
+            self.log.error(f'Error occurred while exporting: {e}.')
 
 
 

@@ -10,15 +10,17 @@
     "input_output": {
         "output_srs": "{{ getv "/configuration/exporter/worker/input/output/output/srs" "EPSG:4326" }}",
         "output_format": "{{ getv "/configuration/exporter/worker/input/output/output/format" "GPKG" }}",
-        "external_physical_path": "{{ getv "/configuration/exporter/worker/input/output/external/physical/path" ""}}",
+        "external_physical_path": "{{ getv "/configuration/exporter/worker/input/output/external/physical/path" "/ubuntu/outputs"}}",
         "internal_outputs_path": "{{ getv "/configuration/exporter/worker/input/output/internal/outputs/path" "./outputs"}}"
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
-        "filename": "{{ getv "/configuration/exporter/worker/logger/filename" "ew_logs.log"}}"
+        "filename": "{{ getv "/configuration/exporter/worker/logger/filename" "ew_logs.log" }}",
+        "backup_count": {{ getv "/configuration/exporter/worker/logger/backup/count" "10" }},
+        "max_bytes": {{ getv "/configuration/exporter/worker/logger/max/bytes" "5242880" }}
     },
-    "commonstorage": {
-        "url": "{{ getv "/configuration/exporter/worker/commonstorage/url" "http://127.0.0.1:8080" }}"
+    "exportstorage": {
+        "url": "{{ getv "/configuration/exporter/worker/exportstorage/url" "http://127.0.0.1:8080" }}"
     },
     "max_attempts": {{ getv "/configuration/exporter/worker/max/attempts" "3" }},
     "mandatory_task_fields": ["fileName", "url", "bbox", "taskId", "directoryName"]

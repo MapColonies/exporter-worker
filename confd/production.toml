@@ -14,6 +14,8 @@ keys = [
     "/configuration/exporter/worker/input_output/internal_outputs_path",
     "/configuration/exporter/worker/logger/level",
     "/configuration/exporter/worker/logger/filename",
+    "/configuration/exporter/worker/logger/backup/count",
+    "/configuration/exporter/worker/logger/max/bytes",
     "/configuration/exporter/worker/max/attempts",
-    "/configuration/exporter/worker/commonstorage/url"
+    "/configuration/exporter/worker/exportstorage/url"
 ]
