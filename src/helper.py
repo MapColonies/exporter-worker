@@ -4,6 +4,8 @@ from src.config import read_config
 from log.logger import Logger
 import requests
 from datetime import datetime
+from time import sleep
+from src.model.enum.status_enum import Status
 
 
 class Helper:
@@ -25,7 +27,7 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, fullPath=None , directoryName=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None , directoryName=None, attempts=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
         url = f'{self.url}/statuses'
@@ -44,15 +46,39 @@ class Helper:
             actual_size = self._convert_and_round_filesize(file_size)
             doc["fileURI"] = external_physical_path
             doc["realFileSize"] = actual_size
-        try:
-            headers = {"Content-Type": "application/json"}
-            self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
+        if attempts is not None:
+            doc["workerAttempts"] = attempts
+        sentToDb = False
+        while not sentToDb:  # retry sending done status to db until service is reached to prevent data loss
+            try:
+                headers = {"Content-Type": "application/json"}
+                self.logger.info(f'Task Id "{taskId}" Updating database: {doc}')
+                requests.put(url=url, data=json.dumps(doc), headers=headers)
+                sentToDb = True
+            except ConnectionError as ce:
+                self.logger.error(f'Database connection failed: {ce}')
+                if status != Status.COMPLETED.value:
+                    sentToDb = True
+                else:
+                    sleep(5)  # retry in 5 sec
+            except Exception as e:
+                self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
+                sentToDb = True
 
-            requests.put(url=url, data=json.dumps(doc), headers=headers)
-        except ConnectionError as ce:
-            self.logger.error(f'Database connection failed: {ce}')
-        except Exception as e:
-            self.logger.error(f'Task Id "{taskId}" Failed to update database: {e}')
+
+    def get_status(self,taskId):
+        while True:  # retry connecting to db service until it is reachable
+            try:
+                self.logger.info(f'getting attmepts count for task "{taskId}"')
+                url = f'{self.url}/statuses/{taskId}'
+                res = requests.get(url=url)
+                return res.json()
+            except ConnectionError as ce:
+                self.logger.error(f'Database connection failed: {ce}')
+            except Exception as e:
+                self.logger.error(f'failed to retrieve attempt count for Task Id "{taskId}": {e}')
+                return None
+            sleep(5)  # retry in 5 sec
 
     def json_converter(self, field):
         if isinstance(field, datetime):
