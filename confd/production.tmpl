@@ -16,8 +16,8 @@
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
         "filename": "{{ getv "/configuration/exporter/worker/logger/filename" "ew_logs.log" }}",
-        "backup_count": {{ getv "/configuration/exporter/worker/backup/count" "10" }},
-        "max_bytes": {{ getv "/configuration/exporter/worker/max/bytes" "5242880" }}
+        "backup_count": {{ getv "/configuration/exporter/worker/logger/backup/count" "10" }},
+        "max_bytes": {{ getv "/configuration/exporter/worker/logger/max/bytes" "5242880" }}
     },
     "exportstorage": {
         "url": "{{ getv "/configuration/exporter/worker/exportstorage/url" "http://127.0.0.1:8080" }}"
