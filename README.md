@@ -57,17 +57,18 @@ in dev mode you can just provide some random path (package will be created at th
 
 **_Configurations:_**
 
-    KAFKA_HOST_IP   an array of host ips and ports of kafka brokers *can be multiple*
-    KAFKA_TOPIC     the topic's name that the worker will be listening to
-    KAFKA_GROUP_ID       the group's name that the consumer will be join to
-    KAFKA_OFFSET_RESET   can be 'earliest' or 'latest', will decide whether to start from the beginning of the topic (earliest)
-                         or from the end of the topic (latest)
-    KAFKA_POLL_TIMEOUT_MILLISECONDS    limits the time from consuming the message to the commit if its not failed **by milliseconds** 
-    KAFKA_POLL_RECORDS    limits the number of messages that will be consumed at once by the worker default to 1
-    INPUT_OUTPUT_OUTPUT_SRS   set target spatial reference default to 'EPSG:4326'
-    INPUT_OUTPUT_OUTPUT_FORMAT   select the output format, use the short format name, default to 'GPKG'
-    INPUT_OUTPUT_EXTERNAL_PHYSICAL_PATH   select the directory name by full path that wil be mounted to outputs directory **mandatory** 
-    INPUT_OUTPUT_INTERNAL_OUTPUTS_PATH    select the directory name by full path that the worker will be generate the package to, deafult to '/repository/root/location/outputs', in docker: "/app/outputs"
-    LOGGER_LEVEL    select the level of logs, default to 'INFO'
-    LOGGER_FILENAME    select the log's file name
-    EXPORTSTORAGE_URL    define the protocol, ip and port of the exported storage service, default to http://127.0.0.1:8080 , change if run on other port or on Docker.
+- CONFIGURATION_EXPORTER_WORKER_KAFKA_HOST_IP   an array of host ips and ports of kafka brokers *can be multiple*
+- CONFIGURATION_EXPORTER_WORKER_KAFKA_TOPIC     the topic's name that the worker will be listening to
+- CONFIGURATION_EXPORTER_WORKER_KAFKA_GROUP_ID       the group's name that the consumer will be join to
+- CONFIGURATION_EXPORTER_WORKER_KAFKA_OFFSET_RESET   can be 'earliest' or 'latest', will decide whether to start from the beginning of the topic (earliest) or from the end of the topic (latest)
+  CONFIGURATION_EXPORTER_WORKER_KAFKA_POLL_TIMEOUT_MILLISECONDS    limits the time from consuming the message to the commit if its not failed **by milliseconds** 
+- CONFIGURATION_EXPORTER_WORKER_KAFKA_POLL_RECORDS    limits the number of messages that will be consumed at once by the worker default to 1
+- CONFIGURATION_EXPORTER_WORKER_INPUT_OUTPUT_OUTPUT_SRS   set target spatial reference default to 'EPSG:4326'
+- CONFIGURATION_EXPORTER_WORKER_INPUT_OUTPUT_OUTPUT_FORMAT   select the output format, use the short format name, default to 'GPKG'
+- CONFIGURATION_EXPORTER_WORKER_INPUT_OUTPUT_EXTERNAL_PHYSICAL_PATH   select the directory name by full path that wil be mounted to outputs directory **mandatory** 
+- CONFIGURATION_EXPORTER_WORKER_INPUT_OUTPUT_INTERNAL_OUTPUTS_PATH    select the directory name by full path that the worker will be generate the package to, deafult to '/repository/root/location/outputs', in docker: "/app/outputs"
+- CONFIGURATION_EXPORTER_WORKER_LOGGER_LEVEL    select the level of logs, default to 'INFO'
+- CONFIGURATION_EXPORTER_WORKER_LOGGER_FILENAME    select the log's file name
+- CONFIGURATION_EXPORTER_WORKER_EXPORTSTORAGE_URL    define the protocol, ip and port of the exported storage service, default to http://127.0.0.1:8080 , change if run on other port or on Docker.
+- CONFIGURATION_EXPORTER_WORKER_GDAL_MULTITHREAD    boolean to enable [gdal mutlithread](https://gdal.org/programs/gdalwarp.html#cmdoption-gdalwarp-multi) option 
+- CONFIGURATION_EXPORTER_WORKER_GDAL_THREAD_COUNT    [gdal wrap options - NUM_THREADS option](https://gdal.org/api/gdalwarp_cpp.html#_CPPv4N15GDALWarpOptions16papszWarpOptionsE) negative number will be converted to "ALL_CPUS"  
