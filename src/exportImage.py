@@ -40,6 +40,9 @@ class ExportImage:
         output_format = self.__config["input_output"]["output_format"]
         es_obj = {"taskId": taskid, "filename": filename}
         self.log.info(f'Task Id "{taskid}" in progress.')
+        thered_count = self.__config['gdal']['thread_count'] if int(self.__config['gdal']['thread_count']) > 0 \
+            else 'val/ALL_CPUS'
+        thered_count = f'NUM_THREADS={thered_count}'
         kwargs = {'dstSRS': self.__config['input_output']['output_srs'],
                   'format': output_format,
                   'outputBounds': bbox,
@@ -47,7 +50,9 @@ class ExportImage:
                   'callback_data': es_obj,
                   'xRes': 1.67638063430786e-07,
                   'yRes': 1.67638063430786e-07,
-                  'creationOptions': ['TILING_SCHEME=InspireCrs84Quad']}
+                  'creationOptions': ['TILING_SCHEME=InspireCrs84Quad'],
+                  'multithread': self.__config['gdal']['multithread'],
+                  'warpOptions': [thered_count]}
         result = gdal.Warp(fullPath, url, **kwargs)
         return result
 

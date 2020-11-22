@@ -22,6 +22,10 @@
     "exportstorage": {
         "url": "{{ getv "/configuration/exporter/worker/exportstorage/url" "http://127.0.0.1:8080" }}"
     },
+    "gdal": {
+        "multithread": {{ getv "/configuration/exporter/worker/gdal/multithread" "true" }},
+        "thread_count": {{ getv "/configuration/exporter/worker/gdal/thread/count" "-1" }}
+    },
     "max_attempts": {{ getv "/configuration/exporter/worker/max/attempts" "3" }},
     "mandatory_task_fields": ["fileName", "url", "bbox", "taskId", "directoryName"]
 }

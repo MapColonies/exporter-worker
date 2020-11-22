@@ -17,5 +17,7 @@ keys = [
     "/configuration/exporter/worker/logger/backup/count",
     "/configuration/exporter/worker/logger/max/bytes",
     "/configuration/exporter/worker/max/attempts",
-    "/configuration/exporter/worker/exportstorage/url"
+    "/configuration/exporter/worker/exportstorage/url",
+    "/configuration/exporter/worker/gdal/multithread",
+    "/configuration/exporter/worker/gdal/thread/count"
 ]
