@@ -1,5 +1,5 @@
 FROM osgeo/gdal:alpine-normal-3.1.3
-RUN groupadd -r app && useradd -r -g app app
+RUN addgroup -S app && adduser -S app -G app
 RUN mkdir /app
 WORKDIR /app
 ENV PYTHONPATH=${PYTHONPATH}:'/app'
