@@ -46,7 +46,6 @@ class ExportImage:
                     bbox, filename, url, taskid, full_path)
 
                 if result:
-
                     # TODO: self.create_index(filename, full_path)
                     self.__helper.save_update(
                         taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
