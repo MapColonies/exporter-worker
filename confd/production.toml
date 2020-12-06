@@ -19,5 +19,12 @@ keys = [
     "/configuration/exporter/worker/max/attempts",
     "/configuration/exporter/worker/exportstorage/url",
     "/configuration/exporter/worker/gdal/multithread",
-    "/configuration/exporter/worker/gdal/thread/count"
+    "/configuration/exporter/worker/gdal/thread/count",
+    "/configuration/exporter/worker/gdal/aws/secret/access/key",
+    "/configuration/exporter/worker/gdal/aws/access/key/id",
+    "/configuration/exporter/worker/gdal/aws/s3/endpoint",
+    "/configuration/exporter/worker/gdal/aws/https",
+    "/configuration/exporter/worker/gdal/aws/virtual/hosting",
+    "/configuration/exporter/worker/gdal/aws/s3/bucket",
+    "/configuration/exporter/worker/storage/provider"
 ]

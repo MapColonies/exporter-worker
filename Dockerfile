@@ -1,4 +1,4 @@
-FROM osgeo/gdal:alpine-normal-3.1.3
+FROM osgeo/gdal:alpine-normal-3.2.0
 RUN mkdir /app
 WORKDIR /app
 COPY requirements.txt ./
