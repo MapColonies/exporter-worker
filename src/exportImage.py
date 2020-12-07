@@ -7,6 +7,14 @@ from src.model.enum.status_enum import Status
 from src.helper import Helper
 
 
+def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
+    if f'{zoom_level}' in zoom_to_resolution_dict:
+        resolution = zoom_to_resolution_dict[f'{zoom_level}']
+        return resolution
+    else:
+        raise Exception(f'No such zoom level. got: {zoom_level}')
+
+
 class ExportImage:
     def __init__(self):
         self.log = Logger.get_logger_instance()
@@ -60,7 +68,7 @@ class ExportImage:
         thread_count = self.__config['gdal']['thread_count'] if int(self.__config['gdal']['thread_count']) > 0 \
             else 'val/ALL_CPUS'
         thread_count = f'NUM_THREADS={thread_count}'
-        resolution = self.__zoom_to_resolution[f'{max_zoom}']
+        resolution = get_zoom_resolution(self.__zoom_to_resolution, max_zoom)
         kwargs = {
             'dstSRS': self.__config['input_output']['output_srs'],
             'format': output_format,
