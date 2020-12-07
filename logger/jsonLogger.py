@@ -1,7 +1,10 @@
+from os import path
 from jsonlogger.logger import JSONLogger
-from src.config import read_config
-config = read_config()
+from src.config import read_json
 
+current_dir_path = path.dirname(__file__)
+config_path = path.join(current_dir_path, '../config/production.json')
+config = read_json(config_path)
 
 
 class Logger:

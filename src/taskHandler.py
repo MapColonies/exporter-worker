@@ -1,9 +1,10 @@
+from os import path
 from kafka import KafkaConsumer, BrokerConnection
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from src.exportImage import ExportImage
 from src.helper import Helper
 from logger.jsonLogger import Logger
-from src.config import read_config
+from src.config import read_json
 
 
 class TaskHandler:
@@ -11,7 +12,10 @@ class TaskHandler:
         self.__helper = Helper()
         self.__exportImage = ExportImage()
         self.log = Logger.get_logger_instance()
-        self.__config = read_config()
+
+        current_dir_path = path.dirname(__file__)
+        config_path = path.join(current_dir_path, '../config/production.json')
+        self.__config = read_json(config_path)
 
     def handle_tasks(self):
         consumer = KafkaConsumer(bootstrap_servers=self.__config['kafka']['host_ip'],
@@ -38,10 +42,6 @@ class TaskHandler:
             task_values = self.__helper.load_json(task.value)
             self.__helper.json_fields_validate(task_values)
             self.log.info(f'Task Id "{task_values["taskId"]}" received.')
-            return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values["taskId"], task_values["directoryName"])
+            return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values['taskId'], task_values['directoryName'], task_values['maxZoom'])
         except Exception as e:
             self.log.error(f'Error occurred while exporting: {e}.')
-
-
-
-
