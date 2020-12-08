@@ -53,7 +53,8 @@ class ExportImage:
             except Exception as e:
                 self.__helper.save_update(
                     taskid, Status.FAILED.value, filename)
-                self.log.error(f'Error occurred while exporting: {e}.')
+                self.log.error(
+                    f'Error occurred while exporting. taskID: {taskid}, error: {e}.')
         return True  # if task shouldn't run it should be removed from queue
 
     def progress_callback(self, complete, message, unknown):
