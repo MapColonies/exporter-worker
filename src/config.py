@@ -2,15 +2,13 @@ import json
 from os import path
 
 
-def read_config():
+def read_json(json_path):
     try:
-        current_dir_path = path.dirname(__file__)
-        config_path = path.join(current_dir_path, '../config/production.json')
-        if path.exists(config_path):
-            with open(config_path, encoding='utf-8') as config_file:
-                _config = json.loads(config_file.read())
-                return _config
+        if path.exists(json_path):
+            with open(json_path, encoding='utf-8') as json_file:
+                _json = json.loads(json_file.read())
+                return _json
         else:
-            raise FileNotFoundError(f"Configure file not found: {config_path}")
+            raise FileNotFoundError(f"Configure file not found: {json_path}")
     except Exception as e:
         raise e

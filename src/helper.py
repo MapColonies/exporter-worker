@@ -1,6 +1,6 @@
 from os import mkdir, path
 import json
-from src.config import read_config
+from src.config import read_json
 from logger.jsonLogger import Logger
 import requests
 from datetime import datetime
@@ -10,7 +10,10 @@ from src.model.enum.status_enum import Status
 
 class Helper:
     def __init__(self):
-        self.__config = read_config()
+        current_dir_path = path.dirname(__file__)
+        config_path = path.join(current_dir_path, '../config/production.json')
+        self.__config = read_json(config_path)
+
         self.log = Logger.get_logger_instance()
         self.url = self.__config["exportstorage"]["url"]
 
@@ -27,11 +30,11 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, fullPath=None , directoryName=None, attempts=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
         url = f'{self.url}/statuses'
-        
+
         doc = {
             "taskId": taskId,
             "status": status,
@@ -62,11 +65,11 @@ class Helper:
                 else:
                     sleep(5)  # retry in 5 sec
             except Exception as e:
-                self.log.error(f'Task Id "{taskId}" Failed to update database: {e}')
+                self.log.error(
+                    f'Task Id "{taskId}" Failed to update database: {e}')
                 sentToDb = True
 
-
-    def get_status(self,taskId):
+    def get_status(self, taskId):
         while True:  # retry connecting to db service until it is reachable
             try:
                 self.log.info(f'getting attempts count for task "{taskId}"')
@@ -76,7 +79,8 @@ class Helper:
             except ConnectionError as ce:
                 self.log.error(f'Database connection failed: {ce}')
             except Exception as e:
-                self.log.error(f'failed to retrieve attempt count for Task Id "{taskId}": {e}')
+                self.log.error(
+                    f'failed to retrieve attempt count for Task Id "{taskId}": {e}')
                 return None
             sleep(5)  # retry in 5 sec
 
@@ -84,13 +88,13 @@ class Helper:
         if isinstance(field, datetime):
             return field.isoformat()
 
-
     def valid_configuration(self, keys):
         value = self.__config[keys[0]][keys[1]]
         if value:
             self.log.info(f'{keys[1]} is set to {value}')
         else:
-            raise ValueError(f'Bad Configuration - no value for {keys[1]} variable.')
+            raise ValueError(
+                f'Bad Configuration - no value for {keys[1]} variable.')
 
     def create_folder_if_not_exists(self, dirPath):
         try:
