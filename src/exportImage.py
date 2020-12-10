@@ -15,6 +15,16 @@ def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
         raise Exception(f'No such zoom level. got: {zoom_level}')
 
 
+def is_valid_zoom_for_area(resolution, tile_size, bbox):
+    top_right_lat = bbox[3]
+    top_right_lon = bbox[2]
+    bottom_left_lat = bbox[1]
+    bottom_left_lon = bbox[0]
+
+    # Check if bbox width and height are at least at the resolution of a pixle at the wanted zoom level
+    return (top_right_lon - bottom_left_lon) >= float(resolution) and (top_right_lat - bottom_left_lat) >= float(resolution)
+
+
 class ExportImage:
     def __init__(self):
         self.log = Logger.get_logger_instance()
@@ -39,10 +49,15 @@ class ExportImage:
             output_format = self.__config["input_output"]["output_format"]
             full_path = f'{path.join(self.__config["input_output"]["internal_outputs_path"], directoryName, filename)}.{output_format}'
             try:
+                resolution = get_zoom_resolution(
+                    self.__zoom_to_resolution, max_zoom)
+                if not is_valid_zoom_for_area(resolution, 256, bbox):
+                    raise Exception(
+                        'Invalid zoom level for exported area (exported area too small)')
                 self.__helper.create_folder_if_not_exists(
                     f'{self.__config["input_output"]["internal_outputs_path"]}/{directoryName}')
                 result = self.create_geopackage(
-                    bbox, filename, url, taskid, full_path, max_zoom)
+                    bbox, filename, url, taskid, full_path, resolution)
 
                 if result is not None:
                     self.create_index(filename, full_path)
@@ -62,14 +77,13 @@ class ExportImage:
         self.__helper.save_update(
             unknown["taskId"], Status.IN_PROGRESS.value, unknown["filename"], percent)
 
-    def create_geopackage(self, bbox, filename, url, taskid, fullPath, max_zoom):
+    def create_geopackage(self, bbox, filename, url, taskid, fullPath, resolution):
         output_format = self.__config["input_output"]["output_format"]
         es_obj = {"taskId": taskid, "filename": filename}
         self.log.info(f'Task Id "{taskid}" in progress.')
         thread_count = self.__config['gdal']['thread_count'] if int(self.__config['gdal']['thread_count']) > 0 \
             else 'val/ALL_CPUS'
         thread_count = f'NUM_THREADS={thread_count}'
-        resolution = get_zoom_resolution(self.__zoom_to_resolution, max_zoom)
         kwargs = {
             'dstSRS': self.__config['input_output']['output_srs'],
             'format': output_format,
