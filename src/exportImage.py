@@ -15,7 +15,7 @@ def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
         raise Exception(f'No such zoom level. got: {zoom_level}')
 
 
-def is_valid_zoom_for_area(resolution, tile_size, bbox):
+def is_valid_zoom_for_area(resolution, bbox):
     top_right_lat = bbox[3]
     top_right_lon = bbox[2]
     bottom_left_lat = bbox[1]
@@ -51,7 +51,7 @@ class ExportImage:
             try:
                 resolution = get_zoom_resolution(
                     self.__zoom_to_resolution, max_zoom)
-                if not is_valid_zoom_for_area(resolution, 256, bbox):
+                if not is_valid_zoom_for_area(resolution, bbox):
                     raise Exception(
                         'Invalid zoom level for exported area (exported area too small)')
                 self.__helper.create_folder_if_not_exists(
