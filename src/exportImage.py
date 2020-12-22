@@ -61,7 +61,7 @@ class ExportImage:
                 result = self.create_geopackage(
                     bbox, filename, url, taskid, full_path, resolution)
 
-                if result is not None:
+                if result:
                     self.create_index(filename, full_path)
                     if (self.__config["storage_provider"] == StorageProvider.S3.value):
                         self.upload_to_s3(filename, directoryName,
@@ -123,7 +123,12 @@ class ExportImage:
             'warpOptions': [thread_count]
         }
         result = gdal.Warp(fullPath, url, **kwargs)
-        return result
+
+        if result:
+            result.FlushCache()
+            result = None
+            return True
+        return False
 
     def create_index(self, filename, fullPath):
         driver = ogr.GetDriverByName("GPKG")

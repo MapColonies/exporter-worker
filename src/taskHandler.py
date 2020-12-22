@@ -29,7 +29,7 @@ class TaskHandler:
             consumer.subscribe([self.__config['kafka']['topic']])
             for task in consumer:
                 result = self.execute_task(task)
-                if result is not None:
+                if result:
                     consumer.commit()
         except Exception as e:
             self.log.error(f'Error occurred: {e}.')
