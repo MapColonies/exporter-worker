@@ -19,5 +19,9 @@ keys = [
     "/configuration/exporter/worker/max/attempts",
     "/configuration/exporter/worker/exportstorage/url",
     "/configuration/exporter/worker/gdal/multithread",
-    "/configuration/exporter/worker/gdal/thread/count"
+    "/configuration/exporter/worker/gdal/thread/count",
+    "/configuration/exporter/worker/s3/endpoint/url",
+    "/configuration/exporter/worker/s3/access/key/id",
+    "/configuration/exporter/worker/s3/secret/access/key",
+    "/configuration/exporter/worker/s3/bucket"
 ]

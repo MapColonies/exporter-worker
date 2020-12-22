@@ -1,10 +1,13 @@
 from osgeo import gdal, ogr
 from os import path
+import boto3
+from shutil import rmtree
 from math import floor
 from logger.jsonLogger import Logger
 from src.config import read_json
 from src.model.enum.status_enum import Status
 from src.helper import Helper
+import traceback
 
 
 def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
@@ -61,8 +64,11 @@ class ExportImage:
 
                 if result is not None:
                     self.create_index(filename, full_path)
+                    self.upload_to_s3(filename, directoryName,
+                                      output_format, full_path)
                     self.__helper.save_update(
                         taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
+                    self.delete_local_directory(directoryName)
                     self.log.info(f'Task Id "{taskid}" is done.')
                 return result
             except Exception as e:
@@ -70,12 +76,31 @@ class ExportImage:
                     taskid, Status.FAILED.value, filename)
                 self.log.error(
                     f'Error occurred while exporting. taskID: {taskid}, error: {e}.')
+                traceback.print_exc()
         return True  # if task shouldn't run it should be removed from queue
 
     def progress_callback(self, complete, message, unknown):
         percent = floor(complete * 100)
         self.__helper.save_update(
             unknown["taskId"], Status.IN_PROGRESS.value, unknown["filename"], percent)
+
+    def upload_to_s3(self, filename, directoryName, output_format, full_path):
+        s3_client = boto3.client('s3', endpoint_url=self.__config["s3"]["endpoint_url"],
+                                 aws_access_key_id=self.__config["s3"]["access_key_id"],
+                                 aws_secret_access_key=self.__config["s3"]["secret_access_key"])
+        bucket = self.__config["s3"]["bucket"]
+
+        s3_client.upload_file(
+            full_path, bucket, f'{directoryName}/{filename}.{output_format}')
+        self.log.info(
+            f'File "{filename}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
+
+    def delete_local_directory(self, directoryName):
+        directory_path = path.join(
+            self.__config["input_output"]["internal_outputs_path"], directoryName)
+        rmtree(directory_path)
+        self.log.info(
+            f'Folder "{directoryName}" in path: "{directory_path}" removed successfully')
 
     def create_geopackage(self, bbox, filename, url, taskid, fullPath, resolution):
         output_format = self.__config["input_output"]["output_format"]
