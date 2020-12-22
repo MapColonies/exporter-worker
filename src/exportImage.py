@@ -7,8 +7,6 @@ from logger.jsonLogger import Logger
 from src.config import read_json
 from src.model.enum.status_enum import Status
 from src.helper import Helper
-import traceback
-
 
 def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
     if f'{zoom_level}' in zoom_to_resolution_dict:
@@ -64,11 +62,15 @@ class ExportImage:
 
                 if result is not None:
                     self.create_index(filename, full_path)
-                    self.upload_to_s3(filename, directoryName,
-                                      output_format, full_path)
+                    if (self.__config["storage_provider"] == 's3'):
+                        self.upload_to_s3(filename, directoryName,
+                                          output_format, full_path)
+
                     self.__helper.save_update(
                         taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
-                    self.delete_local_directory(directoryName)
+                        
+                    if (self.__config["storage_provider"] == 's3'):
+                        self.delete_local_directory(directoryName)
                     self.log.info(f'Task Id "{taskid}" is done.')
                 return result
             except Exception as e:
@@ -76,7 +78,6 @@ class ExportImage:
                     taskid, Status.FAILED.value, filename)
                 self.log.error(
                     f'Error occurred while exporting. taskID: {taskid}, error: {e}.')
-                traceback.print_exc()
         return True  # if task shouldn't run it should be removed from queue
 
     def progress_callback(self, complete, message, unknown):
@@ -96,8 +97,7 @@ class ExportImage:
             f'File "{filename}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
 
     def delete_local_directory(self, directoryName):
-        directory_path = path.join(
-            self.__config["input_output"]["internal_outputs_path"], directoryName)
+        directory_path = path.join(self.__config["input_output"]["internal_outputs_path"], directoryName)
         rmtree(directory_path)
         self.log.info(
             f'Folder "{directoryName}" in path: "{directory_path}" removed successfully')

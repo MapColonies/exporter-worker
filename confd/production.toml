@@ -23,5 +23,6 @@ keys = [
     "/configuration/exporter/worker/s3/endpoint/url",
     "/configuration/exporter/worker/s3/access/key/id",
     "/configuration/exporter/worker/s3/secret/access/key",
-    "/configuration/exporter/worker/s3/bucket"
+    "/configuration/exporter/worker/s3/bucket",
+    "/configuration/exporter/worker/storage/provider"
 ]

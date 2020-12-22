@@ -32,6 +32,7 @@
         "secret_access_key": "{{ getv "/configuration/exporter/worker/s3/secret/access/key" "minioadmin" }}",
         "bucket": "{{ getv "/configuration/exporter/worker/s3/bucket" "mapping-images" }}"
     },
+    "storage_provider": "{{ getv "/configuration/exporter/worker/storage/provider" "fs" }}",
     "max_attempts": {{ getv "/configuration/exporter/worker/max/attempts" "3" }},
     "mandatory_task_fields": ["fileName", "url", "bbox", "taskId", "directoryName"]
 }
