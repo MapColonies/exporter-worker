@@ -6,6 +6,7 @@ from math import floor
 from logger.jsonLogger import Logger
 from src.config import read_json
 from src.model.enum.status_enum import Status
+from src.model.enum.storage_provider_enum import StorageProvider
 from src.helper import Helper
 
 def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
@@ -62,14 +63,14 @@ class ExportImage:
 
                 if result is not None:
                     self.create_index(filename, full_path)
-                    if (self.__config["storage_provider"] == 's3'):
+                    if (self.__config["storage_provider"] == StorageProvider.S3.value):
                         self.upload_to_s3(filename, directoryName,
                                           output_format, full_path)
 
                     self.__helper.save_update(
                         taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
-                        
-                    if (self.__config["storage_provider"] == 's3'):
+
+                    if (self.__config["storage_provider"] == StorageProvider.S3.value):
                         self.delete_local_directory(directoryName)
                     self.log.info(f'Task Id "{taskid}" is done.')
                 return result
