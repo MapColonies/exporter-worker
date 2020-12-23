@@ -7,12 +7,6 @@
         "poll_timeout_milliseconds": {{ getv "/configuration/exporter/worker/kafka/poll/timeout/milliseconds" "270000000" }},
         "poll_records": {{ getv "/configuration/exporter/worker/kafka/poll/records" "1" }}
     },
-    "input_output": {
-        "output_srs": "{{ getv "/configuration/exporter/worker/input/output/output/srs" "EPSG:4326" }}",
-        "output_format": "{{ getv "/configuration/exporter/worker/input/output/output/format" "GPKG" }}",
-        "external_physical_path": "{{ getv "/configuration/exporter/worker/input/output/external/physical/path" "/ubuntu/outputs"}}",
-        "internal_outputs_path": "{{ getv "/configuration/exporter/worker/input/output/internal/outputs/path" "./outputs"}}"
-    },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
         "filename": "{{ getv "/configuration/exporter/worker/logger/filename" "ew_logs.log" }}",
@@ -24,8 +18,21 @@
     },
     "gdal": {
         "multithread": {{ getv "/configuration/exporter/worker/gdal/multithread" "true" }},
-        "thread_count": {{ getv "/configuration/exporter/worker/gdal/thread/count" "-1" }}
+        "thread_count": {{ getv "/configuration/exporter/worker/gdal/thread/count" "-1" }},
+        "output_srs": "{{ getv "/configuration/exporter/worker/gdal/output/srs" "EPSG:4326" }}",
+        "output_format": "{{ getv "/configuration/exporter/worker/gdal/output/format" "GPKG" }}"
     },
+    "fs": {
+        "external_physical_path": "{{ getv "/configuration/exporter/worker/fs/external/physical/path" "/ubuntu/outputs"}}",
+        "internal_outputs_path": "{{ getv "/configuration/exporter/worker/fs/internal/outputs/path" "./outputs"}}"
+    },
+    "s3": {
+        "endpoint_url": "{{ getv "/configuration/exporter/worker/s3/endpoint/url" "http://localhost:9000" }}",
+        "access_key_id": "{{ getv "/configuration/exporter/worker/s3/access/key/id" "minioadmin" }}",
+        "secret_access_key": "{{ getv "/configuration/exporter/worker/s3/secret/access/key" "minioadmin" }}",
+        "bucket": "{{ getv "/configuration/exporter/worker/s3/bucket" "mapping-images" }}"
+    },
+    "storage_provider": "{{ getv "/configuration/exporter/worker/storage/provider" "fs" }}",
     "max_attempts": {{ getv "/configuration/exporter/worker/max/attempts" "3" }},
     "mandatory_task_fields": ["fileName", "url", "bbox", "taskId", "directoryName"]
 }

@@ -24,8 +24,8 @@ class Main:
             f'Service is listening to broker: {self.__config["kafka"]["host_ip"]},'f' topic: {self.__config["kafka"]["topic"]}')
         try:
             self.__helper.create_folder_if_not_exists(
-                self.__config["input_output"]["internal_outputs_path"])
-            keys = ("input_output", "external_physical_path")
+                self.__config["fs"]["internal_outputs_path"])
+            keys = ("fs", "external_physical_path")
             self.__helper.valid_configuration(keys)
             self.__taskHandler.handle_tasks()
         except Exception as e:

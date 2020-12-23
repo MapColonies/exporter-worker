@@ -30,7 +30,7 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None, file_size=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
         url = f'{self.url}/statuses'
@@ -44,8 +44,7 @@ class Helper:
         if progress is not None:
             doc["progress"] = progress
         if fullPath is not None:
-            external_physical_path = f'{self.__config["input_output"]["external_physical_path"]}/{directoryName}/{fileName}.{self.__config["input_output"]["output_format"]}'
-            file_size = path.getsize(fullPath)
+            external_physical_path = f'{self.__config["fs"]["external_physical_path"]}/{directoryName}/{fileName}.{self.__config["gdal"]["output_format"]}'
             actual_size = self._convert_and_round_filesize(file_size)
             doc["fileURI"] = external_physical_path
             doc["realFileSize"] = actual_size
