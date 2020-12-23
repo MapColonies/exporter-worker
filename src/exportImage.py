@@ -9,6 +9,7 @@ from src.model.enum.status_enum import Status
 from src.model.enum.storage_provider_enum import StorageProvider
 from src.helper import Helper
 
+
 def get_zoom_resolution(zoom_to_resolution_dict, zoom_level):
     if f'{zoom_level}' in zoom_to_resolution_dict:
         resolution = zoom_to_resolution_dict[f'{zoom_level}']
@@ -48,8 +49,8 @@ class ExportImage:
         # retry while not done or reached max attempts
         while self.runPreperation(taskid, filename):
             gdal.UseExceptions()
-            output_format = self.__config["input_output"]["output_format"]
-            full_path = f'{path.join(self.__config["input_output"]["internal_outputs_path"], directoryName, filename)}.{output_format}'
+            output_format = self.__config["gdal"]["output_format"]
+            full_path = f'{path.join(self.__config["fs"]["internal_outputs_path"], directoryName, filename)}.{output_format}'
             try:
                 resolution = get_zoom_resolution(
                     self.__zoom_to_resolution, max_zoom)
@@ -57,21 +58,19 @@ class ExportImage:
                     raise Exception(
                         'Invalid zoom level for exported area (exported area too small)')
                 self.__helper.create_folder_if_not_exists(
-                    f'{self.__config["input_output"]["internal_outputs_path"]}/{directoryName}')
+                    f'{self.__config["fs"]["internal_outputs_path"]}/{directoryName}')
                 result = self.create_geopackage(
                     bbox, filename, url, taskid, full_path, resolution)
 
                 if result:
                     self.create_index(filename, full_path)
-                    if (self.__config["storage_provider"] == StorageProvider.S3.value):
-                        self.upload_to_s3(filename, directoryName,
-                                          output_format, full_path)
 
-                    self.__helper.save_update(
-                        taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName)
-
+                    file_size = path.getsize(full_path)
                     if (self.__config["storage_provider"] == StorageProvider.S3.value):
+                        self.upload_to_s3(filename, directoryName, output_format, full_path)
                         self.delete_local_directory(directoryName)
+                    self.__helper.save_update(
+                        taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName, None, file_size)
                     self.log.info(f'Task Id "{taskid}" is done.')
                 return result
             except Exception as e:
@@ -98,20 +97,21 @@ class ExportImage:
             f'File "{filename}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
 
     def delete_local_directory(self, directoryName):
-        directory_path = path.join(self.__config["input_output"]["internal_outputs_path"], directoryName)
+        directory_path = path.join(
+            self.__config["fs"]["internal_outputs_path"], directoryName)
         rmtree(directory_path)
         self.log.info(
             f'Folder "{directoryName}" in path: "{directory_path}" removed successfully')
 
     def create_geopackage(self, bbox, filename, url, taskid, fullPath, resolution):
-        output_format = self.__config["input_output"]["output_format"]
+        output_format = self.__config["gdal"]["output_format"]
         es_obj = {"taskId": taskid, "filename": filename}
         self.log.info(f'Task Id "{taskid}" in progress.')
         thread_count = self.__config['gdal']['thread_count'] if int(self.__config['gdal']['thread_count']) > 0 \
             else 'val/ALL_CPUS'
         thread_count = f'NUM_THREADS={thread_count}'
         kwargs = {
-            'dstSRS': self.__config['input_output']['output_srs'],
+            'dstSRS': self.__config['gdal']['output_srs'],
             'format': output_format,
             'outputBounds': bbox,
             'callback': self.progress_callback,
