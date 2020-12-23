@@ -52,8 +52,10 @@ this will run container with your kafka topic declared topic value , in this cas
 
 **_Important:_**
 
-when running in production must provide config value: "FS_EXTERNAL_PHYSICAL_PATH" (see below on configurations section) as full path, to declare the creation of the packages location,
+* when running in production on FS, you must provide config value: "FS_EXTERNAL_PHYSICAL_PATH" (see below on configurations section) as full path, to declare the creation of the packages location,
 in dev mode you can just provide some random path (package will be created at the mount directory that provided in 'run.sh' script in dev mode)
+
+* if you want to use S3 object storage, read the following configurations to allow the worker connect your S3 bucket
 
 **_Configurations:_**
 
