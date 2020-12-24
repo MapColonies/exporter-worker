@@ -6,6 +6,7 @@ import requests
 from datetime import datetime
 from time import sleep
 from src.model.enum.status_enum import Status
+from src.model.enum.storage_provider_enum import StorageProvider
 
 
 class Helper:
@@ -30,7 +31,7 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None, file_size=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None, file_size=None, download_url=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
         url = f'{self.url}/statuses'
@@ -43,11 +44,16 @@ class Helper:
         }
         if progress is not None:
             doc["progress"] = progress
+
         if fullPath is not None:
             external_physical_path = f'{self.__config["fs"]["external_physical_path"]}/{directoryName}/{fileName}.{self.__config["gdal"]["output_format"]}'
             actual_size = self._convert_and_round_filesize(file_size)
-            doc["fileURI"] = external_physical_path
+            if self.__config["storage_provider"] == StorageProvider.S3.value:
+                doc["fileURI"] = fullPath
+            elif self.__config["storage_provider"] == StorageProvider.FS.value:
+                doc["fileURI"] = external_physical_path
             doc["realFileSize"] = actual_size
+
         if attempts is not None:
             doc["workerAttempts"] = attempts
         sentToDb = False

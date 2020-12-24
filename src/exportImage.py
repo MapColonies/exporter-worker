@@ -67,9 +67,17 @@ class ExportImage:
 
                     file_size = path.getsize(full_path)
                     if (self.__config["storage_provider"] == StorageProvider.S3.value):
-                        self.upload_to_s3(filename, directoryName, output_format, full_path)
-                        self.delete_local_directory(directoryName)
-                    self.__helper.save_update(
+                        try:
+                            s3_download_url = self.upload_to_s3(filename, directoryName, output_format, full_path)
+                        except Exception as e:
+                            raise e
+                        finally:
+                            self.delete_local_directory(directoryName)
+                        self.__helper.save_update(
+                            taskid, Status.COMPLETED.value, filename, 100, s3_download_url, directoryName, None,
+                            file_size)
+                    else:
+                        self.__helper.save_update(
                         taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName, None, file_size)
                     self.log.info(f'Task Id "{taskid}" is done.')
                 return result
@@ -90,11 +98,17 @@ class ExportImage:
                                  aws_access_key_id=self.__config["s3"]["access_key_id"],
                                  aws_secret_access_key=self.__config["s3"]["secret_access_key"])
         bucket = self.__config["s3"]["bucket"]
+        object_key = f'{directoryName}/{filename}.{output_format}'
 
         s3_client.upload_file(
-            full_path, bucket, f'{directoryName}/{filename}.{output_format}')
+            full_path, bucket, object_key)
         self.log.info(
             f'File "{filename}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
+        download_url = s3_client.generate_presigned_url('get_object',
+                                                    Params={'Bucket': bucket,
+                                                            'Key': object_key},
+                                                    ExpiresIn=self.__config["s3"]["download_expired_time"])
+        return download_url
 
     def delete_local_directory(self, directoryName):
         directory_path = path.join(

@@ -30,7 +30,8 @@
         "endpoint_url": "{{ getv "/configuration/exporter/worker/s3/endpoint/url" "http://localhost:9000" }}",
         "access_key_id": "{{ getv "/configuration/exporter/worker/s3/access/key/id" "minioadmin" }}",
         "secret_access_key": "{{ getv "/configuration/exporter/worker/s3/secret/access/key" "minioadmin" }}",
-        "bucket": "{{ getv "/configuration/exporter/worker/s3/bucket" "mapping-images" }}"
+        "bucket": "{{ getv "/configuration/exporter/worker/s3/bucket" "mapping-images" }}",
+        "download_expired_time": {{ getv "/configuration/exporter/worker/s3/download/expired/time" "604800" }}
     },
     "storage_provider": "{{ getv "/configuration/exporter/worker/storage/provider" "fs" }}",
     "max_attempts": {{ getv "/configuration/exporter/worker/max/attempts" "3" }},
