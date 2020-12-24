@@ -73,9 +73,9 @@ class ExportImage:
                             raise e
                         finally:
                             self.delete_local_directory(directoryName)
-                            self.__helper.save_update(
-                                taskid, Status.COMPLETED.value, filename, 100, s3_download_url, directoryName, None,
-                                file_size)
+                        self.__helper.save_update(
+                            taskid, Status.COMPLETED.value, filename, 100, s3_download_url, directoryName, None,
+                            file_size)
                     else:
                         self.__helper.save_update(
                         taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName, None, file_size)

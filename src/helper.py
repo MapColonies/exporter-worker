@@ -31,7 +31,7 @@ class Helper:
         except Exception as e:
             raise ValueError(f"Json validation failed: {e}")
 
-    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None, file_size=None):
+    def save_update(self, taskId, status, fileName, progress=None, fullPath=None, directoryName=None, attempts=None, file_size=None, download_url=None):
         updated_time = datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
 
         url = f'{self.url}/statuses'
