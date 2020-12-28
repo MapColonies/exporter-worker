@@ -48,9 +48,10 @@ class Helper:
         if fullPath is not None:
             external_physical_path = f'{self.__config["fs"]["external_physical_path"]}/{directoryName}/{fileName}.{self.__config["gdal"]["output_format"]}'
             actual_size = self._convert_and_round_filesize(file_size)
-            if self.__config["storage_provider"] == StorageProvider.S3.value:
+            storage_provider = self.__config["storage_provider"].upper()
+            if storage_provider == StorageProvider.S3.value:
                 doc["fileURI"] = fullPath
-            elif self.__config["storage_provider"] == StorageProvider.FS.value:
+            elif storage_provider == StorageProvider.FS.value:
                 doc["fileURI"] = external_physical_path
             doc["realFileSize"] = actual_size
 
