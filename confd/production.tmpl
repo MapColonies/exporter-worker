@@ -9,7 +9,7 @@
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
-        "filename": "{{ getv "/configuration/exporter/worker/logger/filename" "ew_logs.log" }}",
+        "filename": "{{ getv "/configuration/exporter/worker/logger/filename" "./logs/ew_logs.log" }}",
         "backup_count": {{ getv "/configuration/exporter/worker/logger/backup/count" "10" }},
         "max_bytes": {{ getv "/configuration/exporter/worker/logger/max/bytes" "5242880" }}
     },
@@ -24,7 +24,7 @@
     },
     "fs": {
         "external_physical_path": "{{ getv "/configuration/exporter/worker/fs/external/physical/path" "/ubuntu/outputs"}}",
-        "internal_outputs_path": "{{ getv "/configuration/exporter/worker/fs/internal/outputs/path" "./outputs"}}"
+        "internal_outputs_path": "{{ getv "/configuration/exporter/worker/fs/internal/outputs/path" "/app/outputs"}}"
     },
     "s3": {
         "endpoint_url": "{{ getv "/configuration/exporter/worker/s3/endpoint/url" "http://localhost:9000" }}",
