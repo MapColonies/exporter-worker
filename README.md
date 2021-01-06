@@ -57,6 +57,8 @@ in dev mode you can just provide some random path (package will be created at th
 
 * if you want to use S3 object storage, read the following configurations to allow the worker connect your S3 bucket
 
+* if running as none root the log file must be saved to /logs and the internal output path must be /app/root or they can be save to mounted directory with write permission.
+
 **_Configurations:_**
 
 - CONFIGURATION_EXPORTER_WORKER_KAFKA_HOST_IP   an array of host ips and ports of kafka brokers *can be multiple*

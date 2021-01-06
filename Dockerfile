@@ -1,5 +1,4 @@
 FROM osgeo/gdal:alpine-normal-3.1.3
-RUN addgroup -S app && adduser -S app -G app
 RUN mkdir /app
 WORKDIR /app
 ENV PYTHONPATH=${PYTHONPATH}:'/app'
@@ -12,7 +11,8 @@ COPY . .
 RUN chmod +x start.sh
 RUN python3 /app/confd/generate-config.py --environment production
 
-RUN chown -R app .
-USER app:app
+RUN chmod -R 777 ./confd && mkdir -p config && chmod 777 ./config && \
+    mkdir outputs && chmod -R 777 ./outputs && \
+    mkdir -p logs && chmod -R 777 logs 
 
 CMD ["sh", "start.sh"]
