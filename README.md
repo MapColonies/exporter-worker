@@ -82,4 +82,4 @@ Make sure to append `CONFIGURATION_EXPORTER_WORKER` before each of the environme
 - `ACCESS_KEY_ID` the access key id ("username") credential for the S3 service
 - `SECRET_ACCESS_KEY` the secret access key ("password") credential for the S3 service
 - `BUCKET` the bucket we will be using within the S3 service
-- `SSL_VERIFY` (if https) choose whether to verify certificates or not, default is false
+- `SSL_ENABLED` (if https) choose whether to verify certificates or not, default is false
