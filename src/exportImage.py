@@ -99,7 +99,8 @@ class ExportImage:
     def upload_to_s3(self, filename, directoryName, output_format, full_path):
         s3_client = boto3.client('s3', endpoint_url=self.__config["s3"]["endpoint_url"],
                                  aws_access_key_id=self.__config["s3"]["access_key_id"],
-                                 aws_secret_access_key=self.__config["s3"]["secret_access_key"])
+                                 aws_secret_access_key=self.__config["s3"]["secret_access_key"],
+                                 verify=self.__config["s3"]["ssl_enabled"])
         bucket = self.__config["s3"]["bucket"]
         object_key = f'{directoryName}/{filename}.{output_format}'
 

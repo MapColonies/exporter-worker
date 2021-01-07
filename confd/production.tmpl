@@ -31,7 +31,8 @@
         "access_key_id": "{{ getv "/configuration/exporter/worker/s3/access/key/id" "minioadmin" }}",
         "secret_access_key": "{{ getv "/configuration/exporter/worker/s3/secret/access/key" "minioadmin" }}",
         "bucket": "{{ getv "/configuration/exporter/worker/s3/bucket" "mapping-images" }}",
-        "download_expired_time": {{ getv "/configuration/exporter/worker/s3/download/expired/time" "604800" }}
+        "download_expired_time": {{ getv "/configuration/exporter/worker/s3/download/expired/time" "604800" }},
+        "ssl_enabled": {{ getv "/configuration/exporter/worker/s3/ssl/enabled" "false" }}
     },
     "storage_provider": "{{ getv "/configuration/exporter/worker/storage/provider" "fs" }}",
     "max_attempts": {{ getv "/configuration/exporter/worker/max/attempts" "3" }},
