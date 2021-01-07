@@ -83,7 +83,7 @@ class ExportImage:
                         self.__helper.save_update(
                             taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName, None, file_size)
                     self.log.info(f'Task Id "{taskid}" is done.')
-                return result
+                    return True
             except Exception as e:
                 self.__helper.save_update(
                     taskid, Status.FAILED.value, filename)
@@ -140,12 +140,13 @@ class ExportImage:
             'warpOptions': [thread_count]
         }
         result = gdal.Warp(fullPath, url, **kwargs)
-
         if result:
             result.FlushCache()
             result = None
             return True
-        return False
+        else:
+            self.log.error(f'gdal return empty response for task: "{taskid}"')
+            return False
 
     def create_index(self, filename, fullPath):
         driver = ogr.GetDriverByName("GPKG")

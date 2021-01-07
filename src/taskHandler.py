@@ -28,8 +28,10 @@ class TaskHandler:
         try:
             consumer.subscribe([self.__config['kafka']['topic']])
             for task in consumer:
-                result = self.execute_task(task)
+                task_values = self.__helper.load_json(task.value)
+                result = self.execute_task(task_values)
                 if result:
+                    self.log.info(f'commitng task "{task_values["taskId"]}" to kafka')
                     consumer.commit()
         except Exception as e:
             self.log.error(f'Error occurred: {e}.')
@@ -37,9 +39,8 @@ class TaskHandler:
         finally:
             consumer.close()
 
-    def execute_task(self, task):
+    def execute_task(self, task_values):
         try:
-            task_values = self.__helper.load_json(task.value)
             self.__helper.json_fields_validate(task_values)
             self.log.info(f'Task Id "{task_values["taskId"]}" received.')
             return self.__exportImage.export(task_values['bbox'], task_values['fileName'], task_values['url'], task_values['taskId'], task_values['directoryName'], task_values['maxZoom'])
