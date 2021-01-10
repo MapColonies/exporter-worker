@@ -148,48 +148,12 @@ class ExportImage:
             f'Folder "{directoryName}" in path: "{directory_path}" removed successfully')
 
     def create_geopackage(self, bbox, filename, url, task_id, full_path, max_zoom, resolution):
-        # output_format = self.__config["gdal"]["output_format"]
-        # es_obj = {"taskId": task_id, "filename": filename}
-        # self.log.info(f'Task Id "{task_id}" in progress.')
-        # thread_count = self.__config['gdal']['thread_count'] if int(self.__config['gdal']['thread_count']) > 0 \
-        #     else 'val/ALL_CPUS'
-        # thread_count = f'NUM_THREADS={thread_count}'
-        # kwargs = {
-        #     'dstSRS': self.__config['gdal']['output_srs'],
-        #     'format': output_format,
-        #     'outputBounds': bbox,
-        #     'callback': self.warp_progress_callback,
-        #     'callback_data': es_obj,
-        #     'xRes': resolution,
-        #     'yRes': resolution,
-        #     'creationOptions': ['TILING_SCHEME=InspireCrs84Quad'],
-        #     'multithread': self.__config['gdal']['multithread'],
-        #     'warpOptions': [thread_count]
-        # }
-        # warp_result = gdal.Warp(full_path, url, **kwargs)
-        # self.log.info(f'Task Id "{task_id}" completed.')
-
         warp_result = self.create_geopackage_base(
             bbox, filename, url, task_id, full_path, resolution)
 
         if not warp_result:
             self.log.error(f'gdal return empty response for task: "{task_id}"')
             return False
-
-        # Image = gdal.Open(full_path, 1)
-        # resolution_multipliers = calculate_overviews(Image, max_zoom)
-        # gdal.SetConfigOption('COMPRESS_OVERVIEW', 'DEFLATE')
-
-        # # Build overviews
-        # self.log.info(f'Creating overviews for task {task_id}')
-        # kwargs = {
-        #     'callback': self.overviews_progress_callback,
-        #     'callback_data': es_obj
-        # }
-        # overviews_result = Image.BuildOverviews(
-        #     "BILINEAR", resolution_multipliers, **kwargs)
-        # self.log.info(f'Finished creating overviews for task {task_id}')
-        # del Image
 
         overviews_result = self.create_geopackage_overview(
             filename, task_id, full_path, max_zoom)
