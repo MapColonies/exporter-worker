@@ -24,6 +24,7 @@ keys = [
     "/configuration/exporter/worker/s3/access/key/id",
     "/configuration/exporter/worker/s3/secret/access/key",
     "/configuration/exporter/worker/s3/bucket",
+    "/configuration/exporter/worker/s3/ssl/enabled",
     "/configuration/exporter/worker/storage/provider",
     "/configuration/exporter/worker/s3/download/expired/time"
 ]

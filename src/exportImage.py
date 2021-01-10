@@ -83,7 +83,7 @@ class ExportImage:
                         self.__helper.save_update(
                             taskid, Status.COMPLETED.value, filename, 100, full_path, directoryName, None, file_size)
                     self.log.info(f'Task Id "{taskid}" is done.')
-                return result
+                    return True
             except Exception as e:
                 self.__helper.save_update(
                     taskid, Status.FAILED.value, filename)
@@ -99,7 +99,8 @@ class ExportImage:
     def upload_to_s3(self, filename, directoryName, output_format, full_path):
         s3_client = boto3.client('s3', endpoint_url=self.__config["s3"]["endpoint_url"],
                                  aws_access_key_id=self.__config["s3"]["access_key_id"],
-                                 aws_secret_access_key=self.__config["s3"]["secret_access_key"])
+                                 aws_secret_access_key=self.__config["s3"]["secret_access_key"],
+                                 verify=self.__config["s3"]["ssl_enabled"])
         bucket = self.__config["s3"]["bucket"]
         object_key = f'{directoryName}/{filename}.{output_format}'
 
@@ -140,12 +141,13 @@ class ExportImage:
             'warpOptions': [thread_count]
         }
         result = gdal.Warp(fullPath, url, **kwargs)
-
         if result:
             result.FlushCache()
             result = None
             return True
-        return False
+        else:
+            self.log.error(f'gdal return empty response for task: "{taskid}"')
+            return False
 
     def create_index(self, filename, fullPath):
         driver = ogr.GetDriverByName("GPKG")
