@@ -1,5 +1,7 @@
 import unittest
-from src.exportImage import is_valid_zoom_for_area
+from os import path
+from osgeo import gdal
+from src.exportImage import is_valid_zoom_for_area, calculate_overviews
 
 
 # Zoom level 15
@@ -43,6 +45,14 @@ class TestExport(unittest.TestCase):
         bbox = invalid_export["bbox"]
         result = is_valid_zoom_for_area(resolution, bbox)
         self.assertEqual(result, False)
+
+    # Check that correct overviews are calculated
+    def test_calculate_overviews_correctly(self):
+        fullPath = f'{path.dirname(__file__)}/test.GPKG'
+        Image = gdal.Open(fullPath, 1)
+        overviews = calculate_overviews(Image, 18)
+        # Should have overviews 17, ..., 9
+        self.assertEqual(overviews, [2, 4, 8, 16, 32, 64, 128, 256, 512])
 
 
 if __name__ == '__main__':
