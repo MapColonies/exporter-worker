@@ -6,11 +6,11 @@
         "offset_reset": "{{ getv "/configuration/exporter/worker/kafka/offest/reset" "earliest" }}",
         "poll_timeout_milliseconds": {{ getv "/configuration/exporter/worker/kafka/poll/timeout/milliseconds" "270000000" }},
         "poll_records": {{ getv "/configuration/exporter/worker/kafka/poll/records" "1" }},
-        "ssl_context": "{{ getv "/configuration/exporter/worker/kafka/ssl/context" "PLAINTEXT" }]",
-        "ssl_cafile": {{ getv "/configuration/exporter/worker/ssl/cafile" "None" }},
-        "ssl_certfile": {{ getv "/configuration/exporter/worker/ssl/certfile" "None" }},
-        "ssl_keyfile": {{ getv "/configuration/exporter/worker/ssl/keyfile" "None" }},
-        "ssl_password": {{ getv "/configuration/exporter/worker/ssl/password" "None" }},
+        "ssl_context": "{{ getv "/configuration/exporter/worker/kafka/ssl/context" "PLAINTEXT" }}",
+        "ssl_cafile": {{ getv "/configuration/exporter/worker/ssl/cafile" "null" }},
+        "ssl_certfile": {{ getv "/configuration/exporter/worker/ssl/certfile" "null" }},
+        "ssl_keyfile": {{ getv "/configuration/exporter/worker/ssl/keyfile" "null" }},
+        "ssl_password": {{ getv "/configuration/exporter/worker/ssl/password" "null" }}
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
