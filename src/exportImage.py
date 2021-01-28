@@ -97,8 +97,11 @@ class ExportImage:
                         # Try to upload export to s3
                         try:
                             self.log.info(f'Uploading task "{task_id}" to s3.')
-                            s3_download_url = self.upload_to_s3(
+                            self.upload_to_s3(
                                 filename, directoryName, output_format, full_path)
+                            key = '{0}/{1}'.format(directoryName, filename)
+                            s3_download_url = '{0}/{1}.{2}'.format(self.__config["s3"]["download_proxy"], 
+                                                                    key, self.__config['gdal']['output_format'])
                         except Exception as e:
                             self.log.info(
                                 f'Failed uploading task "{task_id}" to s3.')
@@ -155,11 +158,6 @@ class ExportImage:
             full_path, bucket, object_key)
         self.log.info(
             f'File "{filename}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
-        download_url = s3_client.generate_presigned_url('get_object',
-                                                        Params={'Bucket': bucket,
-                                                                'Key': object_key},
-                                                        ExpiresIn=self.__config["s3"]["download_expired_time"])
-        return download_url
 
     def delete_local_directory(self, directoryName):
         """
