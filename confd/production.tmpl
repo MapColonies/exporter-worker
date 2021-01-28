@@ -7,10 +7,10 @@
         "poll_timeout_milliseconds": {{ getv "/configuration/exporter/worker/kafka/poll/timeout/milliseconds" "270000000" }},
         "poll_records": {{ getv "/configuration/exporter/worker/kafka/poll/records" "1" }},
         "ssl_context": "{{ getv "/configuration/exporter/worker/kafka/ssl/context" "PLAINTEXT" }}",
-        "ssl_cafile": {{ getv "/configuration/exporter/worker/ssl/cafile" "null" }},
-        "ssl_certfile": {{ getv "/configuration/exporter/worker/ssl/certfile" "null" }},
-        "ssl_keyfile": {{ getv "/configuration/exporter/worker/ssl/keyfile" "null" }},
-        "ssl_password": {{ getv "/configuration/exporter/worker/ssl/password" "null" }}
+        "ssl_cafile": {{ getv "/configuration/exporter/worker/kafka/ssl/cafile" "null" }},
+        "ssl_certfile": {{ getv "/configuration/exporter/worker/kafka/ssl/certfile" "null" }},
+        "ssl_keyfile": {{ getv "/configuration/exporter/worker/kafka/ssl/keyfile" "null" }},
+        "ssl_password": {{ getv "/configuration/exporter/worker/kafka/ssl/password" "null" }}
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
