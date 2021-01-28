@@ -1,5 +1,5 @@
 from os import path
-from kafka import KafkaConsumer, BrokerConnection
+from kafka import KafkaConsumer
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from src.exportImage import ExportImage
 from src.helper import Helper
