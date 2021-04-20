@@ -1,4 +1,5 @@
 from flask import Flask
+import logging
 app = Flask(__name__)
 host_ip = "0.0.0.0"
 liveness = True
@@ -22,4 +23,7 @@ def readiness_check():
 
 
 def start():
+    app.logger.disabled = True
+    log = logging.getLogger('werkzeug')
+    log.disabled = True
     app.run(host=host_ip)
