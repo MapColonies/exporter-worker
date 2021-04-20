@@ -1,5 +1,5 @@
 from os import path
-from kafka import KafkaConsumer, BrokerConnection
+from kafka import KafkaConsumer
 from kafka.coordinator.assignors.roundrobin import RoundRobinPartitionAssignor
 from src.exportImage import ExportImage
 from src.helper import Helper
@@ -24,6 +24,11 @@ class TaskHandler:
                                  max_poll_records=self.__config['kafka']['poll_records'],
                                  auto_offset_reset=self.__config['kafka']['offset_reset'],
                                  group_id=self.__config['kafka']['group_id'],
+                                 ssl_context=self.__config['kafka']['ssl_context'],
+                                 ssl_cafile=self.__config['kafka']['ssl_cafile'],
+                                 ssl_certfile=self.__config['kafka']['ssl_certfile'],
+                                 ssl_keyfile=self.__config['kafka']['ssl_keyfile'],
+                                 ssl_password=self.__config['kafka']['ssl_password'],
                                  partition_assignment_strategy=[RoundRobinPartitionAssignor])
         try:
             consumer.subscribe([self.__config['kafka']['topic']])
