@@ -7,10 +7,10 @@
         "poll_timeout_milliseconds": {{ getv "/configuration/exporter/worker/kafka/poll/timeout/milliseconds" "270000000" }},
         "poll_records": {{ getv "/configuration/exporter/worker/kafka/poll/records" "1" }},
         "ssl_context": "{{ getv "/configuration/exporter/worker/kafka/ssl/context" "PLAINTEXT" }}",
-        "ssl_cafile": "{{ getv "/configuration/exporter/worker/kafka/ssl/cafile" "null" }}",
-        "ssl_certfile": "{{ getv "/configuration/exporter/worker/kafka/ssl/certfile" "null" }}",
-        "ssl_keyfile": "{{ getv "/configuration/exporter/worker/kafka/ssl/keyfile" "null" }}",
-        "ssl_password": "{{ getv "/configuration/exporter/worker/kafka/ssl/password" "null" }}"
+        "ssl_cafile": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/cafile" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/cafile" }}"{{ else }}{{ "null" }}{{ end }},
+        "ssl_certfile": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/certfile" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/certfile" }}"{{ else }}{{ "null" }}{{ end }},
+        "ssl_keyfile": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/keyfile" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/keyfile" }}"{{ else }}{{ "null" }}{{ end }},
+        "ssl_password": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/password" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/password" }}"{{ else }}{{ "null" }}{{ end }}
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
