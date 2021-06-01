@@ -9,13 +9,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      
-      - name: Azure Pipelines Action
-        uses: Azure/pipelines@v1
-        with:
-          azure-devops-project-url: https://dev.azure.com/Libot-Mipui-Org/exporter-worker
-          azure-pipeline-name: 'build-and-push-to-ACR'
-          azure-devops-token: ${{ secrets.AZURE_DEVOPS_TOKEN }}
+    
   security:
     runs-on: ubuntu-latest
     steps:
