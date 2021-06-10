@@ -1,16 +1,10 @@
 {
-    "kafka" : {
-        "host_ip": {{ getv "/configuration/exporter/worker/kafka/host/ip" "[\"10.28.11.49:9092\"]" }},
-        "topic": "{{ getv "/configuration/exporter/worker/kafka/topic" "topic-test-101" }}",
-        "group_id": "{{ getv "/configuration/exporter/worker/kafka/group/id" "task_group_1" }}",
-        "offset_reset": "{{ getv "/configuration/exporter/worker/kafka/offest/reset" "earliest" }}",
-        "poll_timeout_milliseconds": {{ getv "/configuration/exporter/worker/kafka/poll/timeout/milliseconds" "270000000" }},
-        "poll_records": {{ getv "/configuration/exporter/worker/kafka/poll/records" "1" }},
-        "ssl_context": "{{ getv "/configuration/exporter/worker/kafka/ssl/context" "PLAINTEXT" }}",
-        "ssl_cafile": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/cafile" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/cafile" }}"{{ else }}{{ "null" }}{{ end }},
-        "ssl_certfile": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/certfile" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/certfile" }}"{{ else }}{{ "null" }}{{ end }},
-        "ssl_keyfile": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/keyfile" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/keyfile" }}"{{ else }}{{ "null" }}{{ end }},
-        "ssl_password": {{ if ne (getv "/configuration/exporter/worker/kafka/ssl/password" "") "" }}"{{ getv "/configuration/exporter/worker/kafka/ssl/password" }}"{{ else }}{{ "null" }}{{ end }}
+    "server": {
+        "job_type": "{{ getv "/configuration/exporter/worker/server/job/type" "raster" }}",
+        "task_type": "{{ getv "/configuration/exporter/worker/server/task/type" "exporter" }}",
+        "job_manager_url": {{ getv "/configuration/exporter/worker/server/job/manager/url" "http://127.0.0.1:8082" }},
+        "heartbeat_manager_url": {{ getv "/configuration/exporter/server/heartbeat/manager/url" "http://127.0.0.1:8081" }},
+        "heartbeat_interval_ms": {{ getv "/configuration/exporter/worker/max/attempts" "0.2" }}
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
