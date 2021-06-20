@@ -149,7 +149,6 @@ class ExportImage:
         Callback for updating export progress according to geopackage overview build.
         """
         # Calculate build overview percent of the whole process
-        ## TODO Ask Shimon why overview is not working
         percent = floor(complete * (self.overview_percent))
         asyncio.run_coroutine_threadsafe(
             self.queue_handler.update_progress(unknown['job_id'], unknown['task_id'], self.warp_percent + percent), self.loop)
