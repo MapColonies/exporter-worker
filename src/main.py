@@ -6,9 +6,6 @@ from src.config import read_json
 import src.probe as probe
 import threading
 import asyncio
-from concurrent.futures.thread import ThreadPoolExecutor
-import nest_asyncio
-from multiprocessing import Process
 
 class Main:
     def __init__(self):
