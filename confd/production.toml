@@ -2,11 +2,11 @@
 src = "production.tmpl"
 dest = "./config/default.json"
 keys = [
-    "/configuration/exporter/worker/server/task_type",
-    "/configuration/exporter/worker/server/job_type",
-    "/configuration/exporter/worker/server/job_manager_url",
-    "/configuration/exporter/worker/server/heartbeat_manager_url",
-    "/configuration/exporter/worker/server/heartbeat_interval_ms",
+    "/configuration/exporter/worker/server/task/type",
+    "/configuration/exporter/worker/server/job/type",
+    "/configuration/exporter/worker/server/job/manager/url",
+    "/configuration/exporter/worker/server/heartbeat/manager/url",
+    "/configuration/exporter/worker/server/heartbeat/interval/ms",
     "/configuration/exporter/worker/fs/external_physical_path",
     "/configuration/exporter/worker/fs/internal_outputs_path",
     "/configuration/exporter/worker/logger/level",

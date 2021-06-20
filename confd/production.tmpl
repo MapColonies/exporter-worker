@@ -2,9 +2,9 @@
     "server": {
         "job_type": "{{ getv "/configuration/exporter/worker/server/job/type" "raster" }}",
         "task_type": "{{ getv "/configuration/exporter/worker/server/task/type" "exporter" }}",
-        "job_manager_url": {{ getv "/configuration/exporter/worker/server/job/manager/url" "http://127.0.0.1:8082" }},
-        "heartbeat_manager_url": {{ getv "/configuration/exporter/server/heartbeat/manager/url" "http://127.0.0.1:8081" }},
-        "heartbeat_interval_ms": {{ getv "/configuration/exporter/worker/max/attempts" "0.2" }}
+        "job_manager_url": "{{ getv "/configuration/exporter/worker/server/job/manager/url" "http://127.0.0.1:8082" }}",
+        "heartbeat_manager_url": "{{ getv "/configuration/exporter/server/heartbeat/manager/url" "http://127.0.0.1:8081" }}",
+        "heartbeat_interval_ms": {{ getv "/configuration/exporter/worker/heartbeat/interval/ms" "0.2" }}
     },
     "logger": {
         "level": "{{ getv "/configuration/exporter/worker/logger/level" "INFO" }}",
