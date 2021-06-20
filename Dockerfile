@@ -12,7 +12,7 @@ RUN apk update \
 RUN pip install --upgrade pip
 COPY requirements.txt ./
 RUN pip3 install -r ./requirements.txt -t /app
-# RUN apk del py3-pip
+RUN apk del py3-pip
 COPY . .
 RUN chmod +x start.sh
 RUN python3 /app/confd/generate-config.py --environment production
