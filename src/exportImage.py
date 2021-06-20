@@ -154,7 +154,7 @@ class ExportImage:
             self.queue_handler.update_progress(unknown['job_id'], unknown['task_id'], self.warp_percent + percent), self.loop)
         # Final percent = warp percent + build overviews percent
 
-    def upload_to_s3(self, filename, directory_name, output_format, full_path):
+    def upload_to_s3(self, file_name, directory_name, output_format, full_path):
         """
         Upload a file to s3.
         """
@@ -163,12 +163,12 @@ class ExportImage:
                                  aws_secret_access_key=self.__config["s3"]["secret_access_key"],
                                  verify=self.__config["s3"]["ssl_enabled"])
         bucket = self.__config["s3"]["bucket"]
-        object_key = f'{directory_name}/{filename}.{output_format}'
+        object_key = f'{directory_name}/{file_name}.{output_format}'
 
         s3_client.upload_file(
             full_path, bucket, object_key)
         self.log.info(
-            f'File "{filename}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
+            f'File "{file_name}.{output_format}" was uploaded to bucket "{bucket}" succesfully')
 
     def delete_local_directory(self, directoryName):
         """
@@ -180,12 +180,12 @@ class ExportImage:
         self.log.info(
             f'Folder "{directoryName}" in path: "{directory_path}" removed successfully')
 
-    def create_geopackage(self, bbox, filename, url, task_id, job_id, full_path, max_zoom, resolution):
+    def create_geopackage(self, bbox, file_name, url, task_id, job_id, full_path, max_zoom, resolution):
         """
         Create a geopackage with a maximum zoom level from a given BBOX.
         """
         warp_result = self.create_geopackage_base(
-            bbox, filename, url, task_id, job_id, full_path, resolution)
+            bbox, file_name, url, task_id, job_id, full_path, resolution)
 
         if not warp_result:
             self.log.error(f'gdal return empty response for task: "{task_id}"')
@@ -196,7 +196,7 @@ class ExportImage:
         warp_result = None
 
         overviews_result = self.create_geopackage_overview(
-            filename, task_id, job_id, full_path, max_zoom)
+            file_name, task_id, job_id, full_path, max_zoom)
 
         # Check for overview build errors
         if overviews_result == GDALBuildOverviewsResponse.CE_Failure or overviews_result == GDALBuildOverviewsResponse.CE_Fatal:
@@ -206,18 +206,18 @@ class ExportImage:
 
         # Create indexes
         self.log.info(f'Creating indexes for task "{task_id}".')
-        self.create_index(filename, full_path)
+        self.create_index(file_name, full_path)
         self.log.info(
             f'Done creating indexes for task "{task_id}".')
 
         return True
 
-    def create_geopackage_base(self, bbox, filename, url, task_id, job_id, full_path, resolution):
+    def create_geopackage_base(self, bbox, file_name, url, task_id, job_id, full_path, resolution):
         """
         Create a new geopackage with only the base zoom level.
         """
         output_format = self.__config["gdal"]["output_format"]
-        es_obj = {"task_id": task_id, "job_id": job_id, "filename": filename}
+        es_obj = {"task_id": task_id, "job_id": job_id, "filename": file_name}
         self.log.info(f'Task Id "{task_id}" in progress.')
         thread_count = self.__config['gdal']['thread_count'] if int(self.__config['gdal']['thread_count']) > 0 \
             else 'val/ALL_CPUS'
@@ -239,7 +239,7 @@ class ExportImage:
         self.log.info(f'Base overview built for task: "{task_id}".')
         return result
 
-    def create_geopackage_overview(self, filename, task_id, job_id, full_path, max_zoom):
+    def create_geopackage_overview(self, file_name, task_id, job_id, full_path, max_zoom):
         """
         Add overviews to an existing geopackage.
         Added overviews are calculated according to the base size (geopackage x and y pixle size).
@@ -250,7 +250,7 @@ class ExportImage:
 
         # Build overviews
         self.log.info(f'Creating overviews for task {task_id}')
-        es_obj = {"task_id": task_id, "job_id": job_id, "filename": filename}
+        es_obj = {"task_id": task_id, "job_id": job_id, "filename": file_name}
         kwargs = {
             'callback': self.overviews_progress_callback,
             'callback_data': es_obj
@@ -261,13 +261,13 @@ class ExportImage:
         del Image
         return overviews_result
 
-    def create_index(self, filename, full_path):
+    def create_index(self, file_name, full_path):
         """
         Create index for an existing DB (geopackage).
         """
         driver = ogr.GetDriverByName("GPKG")
         data_source = driver.Open(full_path, update=True)
-        sql = f'CREATE unique INDEX tiles_index on {filename}(zoom_level, tile_column, tile_row)'
+        sql = f'CREATE unique INDEX tiles_index on {file_name}(zoom_level, tile_column, tile_row)'
         data_source.ExecuteSQL(sql)
 
     async def runPreperation(self, task_id, job_id, filename, status, attempts):
