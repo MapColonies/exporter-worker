@@ -14,15 +14,15 @@ class Handler:
         current_dir_path = path.dirname(__file__)
         config_path = path.join(current_dir_path, '../config/production.json')
         self.__config = read_json(config_path)
-        self.queue_handler = TaskHandler(self.__config["server"]["job_type"], self.__config["server"]["task_type"],
-                                         self.__config["server"]["job_manager_url"], self.__config["server"]["heartbeat_manager_url"],
-                                         self.__config["server"]["heartbeat_interval_ms"], self.log)
+        self.queue_handler = TaskHandler(self.__config["queue"]["job_type"], self.__config["queue"]["task_type"],
+                                         self.__config["queue"]["job_manager_url"], self.__config["queue"]["heartbeat_manager_url"],
+                                         self.__config["queue"]["heartbeat_interval_ms"], self.log)
         self.__exportImage = ExportImage(self.queue_handler, self.loop)
 
     async def handle_tasks(self):
         try:
             while True:
-                task = await self.queue_handler.dequeue(5)
+                task = await self.queue_handler.dequeue(self.__config["queue"]["dequeue_interval_ms"])
                 if task:
                     await self.execute_task(task)
         except Exception as e:
