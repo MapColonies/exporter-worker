@@ -118,7 +118,7 @@ class ExportImage:
                                 self.delete_local_directory(directory_name)
                                 await self.queue_handler.ack(job_id, task_id)
                         else:
-                            await asyncio.sleep(2.0)
+                            await asyncio.sleep(self.__config["update_delay_ms"])
                             await self.queue_handler.ack(job_id, task_id)
                             self.log.info(f'Task Id "{task_id}" is done.')
                         return True

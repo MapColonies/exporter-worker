@@ -1,4 +1,5 @@
 {
+    "update_delay_ms": {{ getv "/configuration/exporter/worker/update/delay/ms" "3" }},
     "queue": {
         "job_type": "{{ getv "/configuration/exporter/worker/queue/job/type" "raster" }}",
         "task_type": "{{ getv "/configuration/exporter/worker/queue/task/type" "exporter" }}",

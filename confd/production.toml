@@ -2,6 +2,7 @@
 src = "production.tmpl"
 dest = "./config/default.json"
 keys = [
+    "/configuration/exporter/worker/update/delay/ms",
     "/configuration/exporter/worker/queue/task/type",
     "/configuration/exporter/worker/queue/job/type",
     "/configuration/exporter/worker/queue/job/manager/url",
